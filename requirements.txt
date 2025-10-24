@@ -11,3 +11,4 @@ django-crispy-forms
 crispy-bootstrap5
 django-simple-captcha
 django-extensions
+django-sslserver
