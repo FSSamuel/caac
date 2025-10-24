@@ -219,3 +219,27 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 
+# --- Render host allowlist (auto) ---
+import os as _os
+_render_host = _os.getenv("RENDER_EXTERNAL_HOSTNAME")  # e.g. caac-2.onrender.com
+if _render_host:
+    try:
+        ALLOWED_HOSTS  # type: ignore[name-defined]
+    except NameError:
+        ALLOWED_HOSTS = []
+    try:
+        CSRF_TRUSTED_ORIGINS  # type: ignore[name-defined]
+    except NameError:
+        CSRF_TRUSTED_ORIGINS = []
+
+    if "localhost" not in ALLOWED_HOSTS: ALLOWED_HOSTS.append("localhost")
+    if "127.0.0.1" not in ALLOWED_HOSTS: ALLOWED_HOSTS.append("127.0.0.1")
+    if _render_host not in ALLOWED_HOSTS: ALLOWED_HOSTS.append(_render_host)
+
+    # trust *.onrender.com and the exact host
+    if "https://*.onrender.com" not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append("https://*.onrender.com")
+    exact = f"https://{_render_host}"
+    if exact not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(exact)
+# --- end Render block ---
