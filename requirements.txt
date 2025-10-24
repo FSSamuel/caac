@@ -12,3 +12,4 @@ crispy-bootstrap5
 django-simple-captcha
 django-extensions
 django-sslserver
+stripe
