@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #f8f9fa; padding: 20px; text-align: center; }
+        .content { padding: 20px; }
+        .footer { margin-top: 20px; font-size: 0.9em; color: #6c757d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Thank You for Contacting Us</h2>
+        </div>
+        
+        <div class="content">
+            <p>Dear {{ submission.first_name }},</p>
+            
+            <p>We have received your message and will respond as soon as possible. Here are the details of your submission:</p>
+            
+            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 15px 0;">
+                <p><strong>Reference:</strong> {{ submission.id }}</p>
+                <p><strong>Subject:</strong> {{ submission.get_subject_display }}</p>
+                <p><strong>Date:</strong> {{ submission.created_at|date:"F j, Y" }}</p>
+            </div>
+            
+            <p>If you need to provide additional information, please reply to this email.</p>
+        </div>
+        
+        <div class="footer">
+            <p>Blessings,<br>
+            The {{ site_name }} Team</p>
+        </div>
+    </div>
+</body>
+</html>

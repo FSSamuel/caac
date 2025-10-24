@@ -1,0 +1,284 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% trans "CAAC" %} {% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+/>
+
+    <!-- Main CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <i class="fas fa-church me-2"></i>
+                CAAC Church
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'about' in request.path %}active{% endif %}" href="{% url 'about' %}">About & Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'ministries' in request.path %}active{% endif %}" href="{% url 'sermons' %}">Sermons & Ministries</a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link {% if 'events' in request.path %}active{% endif %}" href="{% url 'event' %}">Events & Booking</a>
+                    </li>
+
+                    
+
+                    
+                    
+
+                    
+
+                    
+                        <li class="language-switcher">
+  <form action="{% url 'set_language' %}" method="post" class="language-form">
+    {% csrf_token %}
+    <input name="next" type="hidden" value="{{ request.path }}" />
+    
+    <div class="select-wrapper">
+      <select name="language" class="language-select" onchange="this.form.submit()">
+        <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>
+          <span class="flag-icon flag-icon-gb"></span> English
+        </option>
+        <option value="zh-hans" {% if LANGUAGE_CODE == 'zh-hans' %}selected{% endif %}>
+          <span class="flag-icon flag-icon-cn"></span> 简体中文
+        </option>
+        <option value="zh-hant" {% if LANGUAGE_CODE == 'zh-hant' %}selected{% endif %}>
+          <span class="flag-icon flag-icon-hk"></span> 繁體中文
+        </option>
+        <option value="ms" {% if LANGUAGE_CODE == 'ms' %}selected{% endif %}>
+          <span class="flag-icon flag-icon-my"></span> Bahasa Melayu
+        </option>
+      </select>
+      <div class="select-arrow">
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </form>
+</li>
+
+
+                  
+                   
+
+                </ul>
+            </div>
+        </div>
+
+
+  
+  
+</div>
+
+    </nav>
+
+    {% if messages %}
+<div class="container mt-3">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+
+{% block extra_js %}
+<script>
+
+// Update notification counter in real-time
+function updateNotificationCounter() {
+    fetch('/notifications/unread-count/')
+        .then(response => response.json())
+        .then(data => {
+            const counter = document.getElementById('notificationCounter');
+            if (counter) {
+                counter.textContent = data.count;
+                counter.style.display = data.count > 0 ? 'inline-block' : 'none';
+            }
+        });
+}
+
+// Mark notification as read when clicked
+function markNotificationAsRead(notificationId) {
+    fetch(`/notifications/mark-as-read/${notificationId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Accept': 'application/json',
+        },
+    }).then(response => {
+        if (response.ok) {
+            updateNotificationCounter();
+        }
+    });
+}
+
+// Helper function to get CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Update counter every 60 seconds
+setInterval(updateNotificationCounter, 60000);
+
+// Initial update
+document.addEventListener('DOMContentLoaded', updateNotificationCounter);
+</script>
+{% endblock %}
+
+
+
+    {% block content %}{% endblock %}
+
+
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h4>CAAC Church</h4>
+                    <p>36 Ringrose Cres<br>Isaacs ACT 2607</p>
+                    <p><i class="fas fa-phone me-2"></i>0429 403 667</p>
+                    <p><i class="fas fa-envelope me-2"></i> info@caacchurch.org</p>
+                </div>
+                
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h4>Quick Links</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{% url 'about' %}" class="text-white text-decoration-none">About Us</a></li>
+                        <li class="mb-2"><a href="{% url 'ministries' %}" class="text-white text-decoration-none">Ministries</a></li>
+                        <li class="mb-2"><a href="{% url 'sermons' %}" class="text-white text-decoration-none">Sermons</a></li>
+                        <li><a href="{% url 'contact' %}" class="text-white text-decoration-none">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-lg-4">
+                    <h4>Connect With Us</h4>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white fs-4"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-white fs-4"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white fs-4"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    
+<div class="mt-4 newsletter-subscription">
+    <h5>Subscribe to Our Newsletter</h5>
+    <form method="post" action="{% url 'subscribe' %}" id="subscribe-form">
+        {% csrf_token %}
+        <div class="input-group">
+            <input type="email" 
+                   name="email" 
+                   class="form-control" 
+                   placeholder="Your email" 
+                   required
+                   aria-label="Your email">
+            <button class="btn btn-primary" type="submit">
+                <i class="fas fa-paper-plane"></i> Subscribe
+            </button>
+        </div>
+    </form>
+    
+ 
+</div>
+
+                </div>
+            </div>
+            
+            <hr class="my-4">
+            
+            <div class="text-center">
+                <p class="mb-0">&copy; {% now "Y" %} CAAC Church. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+        
+document.getElementById('subscribe-form')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const form = this;
+    const formData = new FormData(form);
+    
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        const messagesDiv = document.querySelector('.subscription-messages');
+        if (data.success) {
+            messagesDiv.innerHTML = `
+                <div class="alert alert-success alert-dismissible fade show">
+                    ${data.message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            form.reset();
+        } else {
+            messagesDiv.innerHTML = `
+                <div class="alert alert-danger alert-dismissible fade show">
+                    ${data.message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+
+
+
+
+    </script>
+</body>
+</html>

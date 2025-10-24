@@ -1,0 +1,958 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Sermons & Ministries | CAAC Church{% endblock %}
+
+{% block content %}
+<style>
+    /* === UNIFIED DESIGN SYSTEM === */
+    :root {
+        --primary: #4b6cb7;
+        --secondary: #182848;
+        --light: #f8f9fa;
+        --dark: #343a40;
+        --accent: #8B0000;
+        --mandarin-color: #e67e22;
+        --cantonese-color: #3498db;
+        --english-color: #9b59b6;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+        background-color: #f9f9f9;
+    }
+
+    /* === HERO SECTION === */
+    .hero {
+        background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                    url('https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+        background-size: cover !important;
+        background-position: center !important;
+        min-height: 60vh;
+        color: white;
+        display: flex;
+        align-items: center;
+        margin: 0;
+        width: 100vw;
+    }
+
+    /* === SECTION TITLES === */
+    .section-title {
+        position: relative;
+        margin-bottom: 40px;
+        text-align: center;
+        font-size: 2.8rem;
+        font-weight: 800;
+        color: var(--secondary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 5px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        border-radius: 3px;
+    }
+
+    /* === TAB SYSTEM === */
+    .nav-tabs-custom {
+        border-bottom: 3px solid var(--primary);
+        margin-bottom: 30px;
+    }
+    
+    .nav-tabs-custom .nav-link {
+        color: var(--dark);
+        font-weight: 600;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 8px 8px 0 0;
+        margin-right: 5px;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-tabs-custom .nav-link.active {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+    }
+    
+    .nav-tabs-custom .nav-link:hover {
+        border: none;
+        background-color: rgba(75, 108, 183, 0.1);
+    }
+
+    /* === CARD SYSTEM === */
+    .card-common {
+        background: linear-gradient(145deg, #ffffff, #f8f9fa);
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 2px solid transparent;
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+        padding: 0;
+        margin-bottom: 20px;
+    }
+
+    .card-common::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .card-common:hover::before {
+        transform: scaleX(1);
+    }
+
+    .card-common:hover {
+        transform: translateY(-12px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(75, 108, 183, 0.15), 0 8px 15px rgba(0,0,0,0.1);
+        border-color: var(--primary);
+    }
+
+    /* Ministry Image Styles */
+    .ministry-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+
+    .card-common:hover .ministry-image {
+        transform: scale(1.05);
+    }
+
+    .card-content {
+        padding: 25px;
+    }
+
+    /* === ICON BOX SYSTEM === */
+    .icon-box-common {
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, var(--primary), #6c8cd5);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        transition: all 0.4s ease;
+        box-shadow: 0 8px 20px rgba(75, 108, 183, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .icon-box-common::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+        transform: rotate(45deg);
+        transition: all 0.6s ease;
+    }
+
+    .card-common:hover .icon-box-common::before {
+        transform: rotate(45deg) translate(50%, 50%);
+    }
+
+    .card-common:hover .icon-box-common {
+        background: linear-gradient(135deg, var(--accent), #a83232);
+        transform: scale(1.15) rotate(5deg);
+        box-shadow: 0 12px 25px rgba(139, 0, 0, 0.4);
+    }
+
+    .icon-box-common i {
+        color: white;
+        font-size: 2.5rem;
+        transition: all 0.4s ease;
+        position: relative;
+        z-index: 2;
+    }
+
+    .card-common:hover .icon-box-common i {
+        transform: scale(1.2);
+        color: white;
+    }
+
+    /* === BUTTON SYSTEM === */
+    .btn-common {
+        border: 2px solid transparent;
+        border-radius: 30px;
+        padding: 12px 30px;
+        font-weight: 600;
+        transition: all 0.4s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .btn-common::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, rgba(255,255,255,0.2), rgba(255,255,255,0.4), rgba(255,255,255,0.2));
+        transition: left 0.4s ease;
+        z-index: -1;
+    }
+
+    .btn-common:hover::before {
+        left: 0;
+    }
+
+    .btn-common:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        border-color: rgba(255,255,255,0.5);
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary), #6c8cd5);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, var(--accent), #a83232);
+        color: white;
+    }
+
+    .btn-outline-primary {
+        color: var(--primary);
+        border: 2px solid var(--primary);
+        background: transparent;
+    }
+
+    .btn-outline-primary:hover {
+        color: white;
+        border-color: transparent;
+        background: linear-gradient(135deg, var(--primary), var(--accent));
+    }
+
+    /* === SERMON SPECIFIC STYLES === */
+    .sermon-thumbnail {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        transition: transform 0.3s ease;
+    }
+
+    .card-common:hover .sermon-thumbnail {
+        transform: scale(1.03);
+    }
+
+    .sermon-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .btn-download, .btn-watch {
+        padding: 10px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        flex: 1;
+        text-align: center;
+    }
+
+    .btn-download {
+        background: #3498db;
+    }
+
+    .btn-download:hover {
+        background: #2980b9;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .btn-watch {
+        background: #e74c3c;
+    }
+
+    .btn-watch:hover {
+        background: #c0392b;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    /* === MINISTRY SPECIFIC STYLES === */
+    .ministry-quick-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
+        margin: 30px 0;
+    }
+
+    .age-group {
+        background-color: var(--primary);
+        color: white;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    /* === FORM STYLES === */
+    .form-control, .form-select {
+        border-radius: 10px;
+        padding: 12px 15px;
+        margin-bottom: 15px;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 0.25rem rgba(75, 108, 183, 0.25);
+    }
+
+    /* === TAB CONTENT === */
+    .tab-content {
+        padding: 20px 0;
+    }
+    
+    .tab-pane {
+        display: none;
+    }
+    
+    .tab-pane.active {
+        display: block;
+        animation: fadeIn 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    /* === ANIMATIONS === */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in-up {
+        animation: fadeInUp 0.6s ease forwards;
+    }
+
+    /* === LIVE STREAM SECTION === */
+    .live-stream-section {
+        background: linear-gradient(135deg, var(--primary), #6c8cd5);
+        color: white;
+    }
+
+    /* === RESPONSIVE DESIGN === */
+    @media (max-width: 768px) {
+        .hero h1 {
+            font-size: 2.5rem;
+        }
+        
+        .nav-tabs-custom .nav-link {
+            padding: 10px 15px;
+            font-size: 0.9rem;
+        }
+        
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+        }
+        
+        .icon-box-common {
+            width: 80px;
+            height: 80px;
+        }
+        
+        .icon-box-common i {
+            font-size: 2rem;
+        }
+
+        .sermon-actions {
+            flex-direction: column;
+        }
+
+        .ministry-quick-links {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn-common {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
+
+        .ministry-image {
+            height: 180px;
+        }
+    }
+
+    /* Animation delays */
+    .animate-delay-1 { animation-delay: 0.1s; }
+    .animate-delay-2 { animation-delay: 0.2s; }
+    .animate-delay-3 { animation-delay: 0.3s; }
+    .animate-delay-4 { animation-delay: 0.4s; }
+</style>
+
+<div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container text-center">
+            <h1 class="display-3 fw-bold mb-4">Sermons & Ministries</h1>
+            <p class="lead mb-4">Grow in faith through teaching and community</p>
+        </div>
+    </section>
+
+    <!-- Tab Navigation -->
+    <ul class="nav nav-tabs-custom justify-content-center" id="sermonMinistryTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="sermons-tab" data-bs-toggle="tab" data-bs-target="#sermons" type="button" role="tab">Sermons</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="ministries-tab" data-bs-toggle="tab" data-bs-target="#ministries" type="button" role="tab">Ministries</button>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content" id="sermonMinistryTabsContent">
+        <!-- Sermons Tab -->
+        <div class="tab-pane fade show active" id="sermons" role="tabpanel">
+            <!-- Sermon Filter -->
+            <section class="py-5">
+                <div class="container">
+                    <div class="card-common">
+                        <div class="card-content">
+                            <h3 class="section-title"><i class="fas fa-filter me-2"></i> Filter Sermons</h3>
+                            <form method="get" action="#">
+                                <div class="row g-3 mt-3">
+                                    <div class="col-md-4">
+                                        <select class="form-select" name="series">
+                                            <option value="">All Series</option>
+                                            {% for series in series_list %}
+                                                <option value="{{ series.id }}" {% if series.id|stringformat:"s" == request.GET.series %}selected{% endif %}>{{ series.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select class="form-select" name="speaker">
+                                            <option value="">All Speakers</option>
+                                            {% for speaker in speakers_list %}
+                                                <option value="{{ speaker.id }}" {% if speaker.id|stringformat:"s" == request.GET.speaker %}selected{% endif %}>{{ speaker.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select class="form-select" name="date">
+                                            <option value="">All Dates</option>
+                                            <option value="month" {% if request.GET.date == 'month' %}selected{% endif %}>This Month</option>
+                                            <option value="3months" {% if request.GET.date == '3months' %}selected{% endif %}>Last 3 Months</option>
+                                            <option value="year" {% if request.GET.date == 'year' %}selected{% endif %}>This Year</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 text-center">
+                                        <button type="submit" class="btn btn-primary btn-common">Apply Filters</button>
+                                        <a href="#" class="btn btn-outline-primary btn-common ms-2">Reset</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sermon Listings -->
+            <section class="py-5 bg-light">
+                <div class="container">
+                    <div class="text-center mb-5">
+                        <h2 class="section-title">Recent Sermons</h2>
+                        <p class="lead text-muted">Explore our library of biblical messages</p>
+                    </div>
+                    
+                    <div class="row g-4">
+                        {% for sermon in sermons %}
+                        <div class="col-lg-6 animate-fade-in-up">
+                            <div class="card-common">
+                                <div class="card-content">
+                                    {% if sermon.thumbnail %}
+                                    <img src="{{ sermon.thumbnail.url }}" alt="{{ sermon.title }}" class="sermon-thumbnail">
+                                    {% else %}
+                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" alt="{{ sermon.title }}" class="sermon-thumbnail">
+                                    {% endif %}
+                                    
+                                    <div class="sermon-info">
+                                        <h4>{{ sermon.title }}</h4>
+                                        <p class="text-primary fw-bold mb-1">{{ sermon.preacher }}</p>
+                                        <p class="text-muted mb-3">{{ sermon.date|date:"F j, Y" }}</p>
+                                        <p class="description">{{ sermon.description|truncatewords:30 }}</p>
+                                        
+                                        <div class="sermon-actions">
+                                            <a href="{{ sermon.audio.url }}" class="btn-download">
+                                                <i class="fas fa-download me-2"></i> Download Audio
+                                            </a>
+                                            {% if sermon.video %}
+                                            <a href="{{ sermon.video.url }}" class="btn-watch">
+                                                <i class="fas fa-play me-2"></i> Watch Video
+                                            </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12 text-center">
+                            <div class="card-common">
+                                <div class="card-content">
+                                    <p class="lead">No sermons found. Please check back later.</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+
+            <!-- Watch Live Section -->
+            <section class="py-5 live-stream-section">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 mb-4 mb-lg-0 animate-fade-in-up">
+                            <h2 class="display-5 fw-bold mb-4">Join Us Live This Sunday</h2>
+                            <p class="lead mb-4">Can't make it in person? Watch our services live online from anywhere.</p>
+                            <a href="#" class="btn btn-light btn-common btn-lg px-4">
+                                <i class="fas fa-video me-2"></i> Watch Live
+                            </a>
+                        </div>
+                        <div class="col-lg-6 animate-fade-in-up animate-delay-1">
+                            <div class="ratio ratio-16x9">
+                                <iframe src="https://www.youtube.com/embed/live_stream?channel=UC_XXXXXX" 
+                                        frameborder="0" 
+                                        allowfullscreen
+                                        style="border-radius: 15px;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Ministries Tab -->
+        <div class="tab-pane fade" id="ministries" role="tabpanel">
+            <!-- Ministry Overview -->
+            <section class="py-5">
+                <div class="container">
+                    <div class="text-center mb-5">
+                        <h2 class="section-title">Our Ministries</h2>
+                        <p class="lead text-muted">Find where you belong and grow in faith together</p>
+                    </div>
+                    
+                    <div class="ministry-quick-links">
+                        <a href="#children" class="btn btn-primary btn-common btn-lg px-4 py-2" onclick="scrollToSection('children')">
+                            <i class="fas fa-child me-2"></i> Children
+                        </a>
+                        <a href="#youth" class="btn btn-primary btn-common btn-lg px-4 py-2" onclick="scrollToSection('youth')">
+                            <i class="fas fa-users me-2"></i> Youth
+                        </a>
+                        <a href="#adults" class="btn btn-primary btn-common btn-lg px-4 py-2" onclick="scrollToSection('adults')">
+                            <i class="fas fa-hands-praying me-2"></i> Adults
+                        </a>
+                        <a href="#outreach" class="btn btn-primary btn-common btn-lg px-4 py-2" onclick="scrollToSection('outreach')">
+                            <i class="fas fa-hands-helping me-2"></i> Outreach
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Children's Ministry -->
+            <section id="children" class="py-5 bg-light">
+                <div class="container">
+                    <div class="text-center mb-5">
+                        <h2 class="section-title">Children's Ministry</h2>
+                        <p class="lead text-muted">Nurturing young hearts in God's love</p>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6 animate-fade-in-up animate-delay-1">
+                            <div class="card-common">
+                                <img src="https://images.unsplash.com/photo-1530041539828-114de669390e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" 
+                                     alt="Kids Church" 
+                                     class="ministry-image">
+                                <div class="card-content">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="age-group">Ages 3-5</span>
+                                        <span class="text-muted">Sundays 9:30 AM</span>
+                                    </div>
+                                    <h4>Kids Church</h4>
+                                    <p>Age-appropriate Bible lessons, worship, and activities designed to help young children understand God's love in a fun and engaging way.</p>
+                                    <a href="#" class="btn btn-primary btn-common mt-3">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 animate-fade-in-up animate-delay-2">
+                            <div class="card-common">
+                                <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" 
+                                     alt="Elementary Ministry" 
+                                     class="ministry-image">
+                                <div class="card-content">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="age-group">Grades 1-5</span>
+                                        <span class="text-muted">Sundays 9:30 AM</span>
+                                    </div>
+                                    <h4>Elementary Ministry</h4>
+                                    <p>Interactive Bible teaching, small group discussions, and creative activities that help elementary-aged children grow in their relationship with Jesus.</p>
+                                    <a href="#" class="btn btn-primary btn-common mt-3">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-5">
+                        <div class="row g-4">
+                            <div class="col-md-4 animate-fade-in-up animate-delay-1">
+                                <div class="card-common text-center">
+                                    <div class="card-content">
+                                        <div class="icon-box-common" style="width: 80px; height: 80px;">
+                                            <i class="fas fa-campground fa-2x"></i>
+                                        </div>
+                                        <h4>Vacation Bible School</h4>
+                                        <p>Annual summer program with games, music, and Bible adventures.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 animate-fade-in-up animate-delay-2">
+                                <div class="card-common text-center">
+                                    <div class="card-content">
+                                        <div class="icon-box-common" style="width: 80px; height: 80px;">
+                                            <i class="fas fa-birthday-cake fa-2x"></i>
+                                        </div>
+                                        <h4>Children's Events</h4>
+                                        <p>Seasonal activities and special celebrations throughout the year.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 animate-fade-in-up animate-delay-3">
+                                <div class="card-common text-center">
+                                    <div class="card-content">
+                                        <div class="icon-box-common" style="width: 80px; height: 80px;">
+                                            <i class="fas fa-user-shield fa-2x"></i>
+                                        </div>
+                                        <h4>Safe Environment</h4>
+                                        <p>All volunteers are background checked and trained.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Youth Ministry -->
+            <section id="youth" class="py-5">
+                <div class="container">
+                    <div class="text-center mb-5">
+                        <h2 class="section-title">Youth Ministry</h2>
+                        <p class="lead text-muted">Helping teens navigate life with biblical truth</p>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6 animate-fade-in-up animate-delay-1">
+                            <div class="card-common">
+                                <img src="https://images.unsplash.com/photo-1540957908336-73bc984e8b2a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" 
+                                     alt="Middle School Ministry" 
+                                     class="ministry-image">
+                                <div class="card-content">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="age-group">Grades 6-8</span>
+                                        <span class="text-muted">Fridays 6:30 PM</span>
+                                    </div>
+                                    <h4>Middle School Ministry</h4>
+                                    <p>A place for younger teens to build friendships, ask big questions, and discover how faith connects to their daily lives.</p>
+                                    <a href="#" class="btn btn-primary btn-common mt-3">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 animate-fade-in-up animate-delay-2">
+                            <div class="card-common">
+                                <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" 
+                                     alt="High School Ministry" 
+                                     class="ministry-image">
+                                <div class="card-content">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="age-group">Grades 9-12</span>
+                                        <span class="text-muted">Fridays 7:00 PM</span>
+                                    </div>
+                                    <h4>High School Ministry</h4>
+                                    <p>Older teens engage in deep discussions, worship, and service opportunities as they prepare for life beyond high school.</p>
+                                    <a href="#" class="btn btn-primary btn-common mt-3">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-5">
+                        <div class="row g-4">
+                            <div class="col-md-4 animate-fade-in-up animate-delay-1">
+                                <div class="card-common text-center">
+                                    <div class="card-content">
+                                        <div class="icon-box-common" style="width: 80px; height: 80px;">
+                                            <i class="fas fa-mountain fa-2x"></i>
+                                        </div>
+                                        <h4>Retreats</h4>
+                                        <p>Annual weekend getaways for spiritual growth and bonding.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 animate-fade-in-up animate-delay-2">
+                                <div class="card-common text-center">
+                                    <div class="card-content">
+                                        <div class="icon-box-common" style="width: 80px; height: 80px;">
+                                            <i class="fas fa-music fa-2x"></i>
+                                        </div>
+                                        <h4>Worship Team</h4>
+                                        <p>Opportunities for teens to develop and use musical gifts.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 animate-fade-in-up animate-delay-3">
+                                <div class="card-common text-center">
+                                    <div class="card-content">
+                                        <div class="icon-box-common" style="width: 80px; height: 80px;">
+                                            <i class="fas fa-hands-helping fa-2x"></i>
+                                        </div>
+                                        <h4>Mission Trips</h4>
+                                        <p>Summer service projects locally and internationally.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Adult Ministries -->
+            <section id="adults" class="py-5 bg-light">
+                <div class="container">
+                    <div class="text-center mb-5">
+                        <h2 class="section-title">Adult Ministries</h2>
+                        <p class="lead text-muted">Growing together in faith at every stage of life</p>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-4 animate-fade-in-up animate-delay-1">
+                            <div class="card-common">
+                                <img src="https://images.unsplash.com/photo-1519452635265-7b1fbfd1e4e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" 
+                                     alt="Small Groups" 
+                                     class="ministry-image">
+                                <div class="card-content">
+                                    <h4>Small Groups</h4>
+                                    <p>Weekly gatherings in homes for Bible study, prayer, and fellowship with others in similar life stages.</p>
+                                    <a href="#" class="btn btn-primary btn-common mt-3">Find a Group</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 animate-fade-in-up animate-delay-2">
+                            <div class="card-common">
+                                <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" 
+                                     alt="Men's Ministry" 
+                                     class="ministry-image">
+                                <div class="card-content">
+                                    <h4>Men's Ministry</h4>
+                                    <p>Monthly breakfasts, service projects, and outdoor activities to build godly character and friendships.</p>
+                                    <a href="#" class="btn btn-primary btn-common mt-3">Get Involved</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 animate-fade-in-up animate-delay-3">
+                            <div class="card-common">
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" 
+                                     alt="Women's Ministry" 
+                                     class="ministry-image">
+                                <div class="card-content">
+                                    <h4>Women's Ministry</h4>
+                                    <p>Bible studies, retreats, and special events to encourage spiritual growth and meaningful connections.</p>
+                                    <a href="#" class="btn btn-primary btn-common mt-3">Join Us</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-5">
+                        <div class="row g-4">
+                            <div class="col-md-3 animate-fade-in-up animate-delay-1">
+                                <div class="card-common text-center">
+                                    <div class="card-content">
+                                        <div class="icon-box-common" style="width: 70px; height: 70px;">
+                                            <i class="fas fa-ring fa-2x"></i>
+                                        </div>
+                                        <h4>Marriage Enrichment</h4>
+                                        <p>Workshops and date nights to strengthen marriages.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 animate-fade-in-up animate-delay-2">
+                                <div class="card-common text-center">
+                                    <div class="card-content">
+                                        <div class="icon-box-common" style="width: 70px; height: 70px;">
+                                            <i class="fas fa-baby fa-2x"></i>
+                                        </div>
+                                        <h4>Young Families</h4>
+                                        <p>Support and fellowship for parents with young children.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 animate-fade-in-up animate-delay-3">
+                                <div class="card-common text-center">
+                                    <div class="card-content">
+                                        <div class="icon-box-common" style="width: 70px; height: 70px;">
+                                            <i class="fas fa-graduation-cap fa-2x"></i>
+                                        </div>
+                                        <h4>College & Career</h4>
+                                        <p>Community for young adults navigating early adulthood.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 animate-fade-in-up animate-delay-4">
+                                <div class="card-common text-center">
+                                    <div class="card-content">
+                                        <div class="icon-box-common" style="width: 70px; height: 70px;">
+                                            <i class="fas fa-chair fa-2x"></i>
+                                        </div>
+                                        <h4>Seniors</h4>
+                                        <p>Monthly luncheons and Bible studies for older adults.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Outreach -->
+            <section id="outreach" class="py-5">
+                <div class="container">
+                    <div class="text-center mb-5">
+                        <h2 class="section-title">Outreach & Service</h2>
+                        <p class="lead text-muted">Sharing God's love in practical ways</p>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-4 animate-fade-in-up animate-delay-1">
+                            <div class="card-common">
+                                <img src="https://images.unsplash.com/photo-1554672408-730436b60dde?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" 
+                                     alt="Food Pantry" 
+                                     class="ministry-image">
+                                <div class="card-content">
+                                    <h4>Food Pantry</h4>
+                                    <p>Weekly distribution of groceries to families in need in our community.</p>
+                                    <a href="#" class="btn btn-primary btn-common mt-3">Volunteer</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 animate-fade-in-up animate-delay-2">
+                            <div class="card-common">
+                                <img src="https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" 
+                                     alt="Mission Trips" 
+                                     class="ministry-image">
+                                <div class="card-content">
+                                    <h4>Mission Trips</h4>
+                                    <p>Annual opportunities to serve both locally and internationally.</p>
+                                    <a href="#" class="btn btn-primary btn-common mt-3">Upcoming Trips</a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 animate-fade-in-up animate-delay-3">
+                            <div class="card-common">
+                                <img src="https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80" 
+                                     alt="Prison Ministry" 
+                                     class="ministry-image">
+                                <div class="card-content">
+                                    <h4>Prison Ministry</h4>
+                                    <p>Bringing hope and restoration to incarcerated individuals and their families.</p>
+                                    <a href="#" class="btn btn-primary btn-common mt-3">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-5">
+                        <a href="#" class="btn btn-primary btn-common btn-lg px-4 py-2">
+                            <i class="fas fa-handshake me-2"></i> Serve With Us
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function switchToTab(tabId) {
+      const tabElement = document.getElementById(tabId);
+      const tabTrigger = document.querySelector(`[data-bs-target="#${tabId}"]`);
+      
+      if (tabTrigger && tabElement) {
+        document.querySelectorAll('.nav-link').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('show', 'active'));
+        tabTrigger.classList.add('active');
+        tabElement.classList.add('show', 'active');
+      }
+    }
+
+    function scrollToSection(sectionId) {
+        const section = document.getElementById(sectionId);
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabTriggers = document.querySelectorAll('[data-bs-toggle="tab"]');
+      tabTriggers.forEach(trigger => {
+        trigger.addEventListener('click', function() {
+          const target = this.getAttribute('data-bs-target');
+          switchToTab(target.substring(1));
+        });
+      });
+    });
+</script>
+
+{% endblock %}

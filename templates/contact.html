@@ -1,0 +1,321 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome | Grace Community Church{% endblock %}
+
+{% block content %}
+
+
+
+ <!-- Tab Navigation -->
+    <section class="py-4 bg-light">
+        <div class="container">
+            <ul class="nav nav-tabs justify-content-center" id="aboutContactTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab">About Us</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab">Contact Us</button>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+
+    <!-- Hero Section -->
+     <section class="hero d-flex align-items-center" 
+         style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                url('https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+                background-size: cover;
+                background-position: center;
+                min-height: 60vh; color: white;">
+        
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-3 fw-bold mb-4">We'd Love to Hear From You</h1>
+                    <p class="lead mb-4">Whether you have questions, prayer requests, or just want to say hello, our team is here to help.</p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="#contact-form" class="btn btn-primary btn-lg px-4 py-2">
+                            <i class="fas fa-envelope me-2"></i> Send a Message
+                        </a>
+                        <a href="#visit-us" class="btn btn-outline-light btn-lg px-4 py-2">
+                            <i class="fas fa-map-marker-alt me-2"></i> Visit Us
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Methods -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">How to Reach Us</h2>
+                <p class="lead text-muted">Choose the most convenient way to connect</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="contact-card card h-100 p-4 text-center">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone-alt text-primary fa-2x"></i>
+                        </div>
+                        <h4>Call Us</h4>
+                        <p class="mb-1"><strong>Main Office:</strong></p>
+                        <p class="mb-3">(02) 1234 5678</p>
+                        <p class="mb-1"><strong>Pastoral Care:</strong></p>
+                        <p class="mb-3">(02) 1234 5679</p>
+                        <p class="text-muted">Monday-Friday, 9:00 AM - 5:00 PM</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="contact-card card h-100 p-4 text-center">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope text-primary fa-2x"></i>
+                        </div>
+                        <h4>Email Us</h4>
+                        <p class="mb-1"><strong>General Inquiries:</strong></p>
+                        <p class="mb-3">info@gracechurch.org</p>
+                        <p class="mb-1"><strong>Prayer Requests:</strong></p>
+                        <p class="mb-3">prayer@gracechurch.org</p>
+                        <p class="text-muted">We typically respond within 24 hours</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="contact-card card h-100 p-4 text-center">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt text-primary fa-2x"></i>
+                        </div>
+                        <h4>Visit Us</h4>
+                        <p>123 Faith Avenue<br>Canberra, ACT 2600</p>
+                        <p class="mb-3"><strong>Service Times:</strong><br>
+                        Sunday 9:30 AM<br>
+                        Wednesday 7:00 PM</p>
+                        <a href="#visit-us" class="btn btn-outline-primary">Get Directions</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section id="contact-form" class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-5">
+                            <h2 class="display-5 fw-bold">Send Us a Message</h2>
+                            <p class="lead text-muted">Fill out the form below and we'll get back to you soon</p>
+                        </div>
+                        
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        <form method="post" id="contactForm">
+                            {% csrf_token %}
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="id_first_name" class="form-label">First Name *</label>
+                                    {{ form.first_name }}
+                                    {% if form.first_name.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.first_name.errors.as_text }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="id_last_name" class="form-label">Last Name *</label>
+                                    {{ form.last_name }}
+                                    {% if form.last_name.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.last_name.errors.as_text }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="id_email" class="form-label">Email Address *</label>
+                                    {{ form.email }}
+                                    {% if form.email.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.email.errors.as_text }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label for="id_phone" class="form-label">Phone Number</label>
+                                    {{ form.phone }}
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label for="id_subject" class="form-label">Subject *</label>
+                                    {{ form.subject }}
+                                </div>
+                                
+                                <div class="col-12">
+                                    <label for="id_message" class="form-label">Your Message *</label>
+                                    {{ form.message }}
+                                    {% if form.message.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.message.errors.as_text }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        {{ form.newsletter }}
+                                        <label class="form-check-label" for="id_newsletter">
+                                            Subscribe to our newsletter
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12 mt-3">
+                                    {{ form.captcha }}
+                                    {% if form.captcha.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ form.captcha.errors.as_text }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="col-12 text-center mt-4">
+                                    <button type="submit" class="btn btn-primary btn-lg px-5">
+                                        <i class="fas fa-paper-plane me-2"></i> Send Message
+                                    </button>
+                                </div>
+                                
+                                <div class="col-12 text-muted small mt-3">
+                                    <p>* Required fields</p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Visit Us -->
+    <section id="visit-us" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Visit Our Campus</h2>
+                <p class="lead text-muted">We'd love to welcome you in person</p>
+            </div>
+            
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-6">
+                    <div class="ratio ratio-16x9">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3257.963055582423!2d149.1307353152446!3d-35.2823447802939!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b164d69b05c9021%3A0x500ea68ea8650!2sCanberra%20ACT!5e0!3m2!1sen!2sau!4v1688123456789!5m2!1sen!2sau" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="ps-lg-5">
+                        <h3 class="mb-4">Grace Community Church</h3>
+                        <p class="mb-4">123 Faith Avenue<br>Canberra, ACT 2600<br>Australia</p>
+                        
+                        <h4 class="mt-5 mb-3">Service Times</h4>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><strong>Sunday Worship:</strong> 9:30 AM</li>
+                            <li class="mb-2"><strong>Sunday School:</strong> 9:30 AM (Ages 3-12)</li>
+                            <li class="mb-2"><strong>Youth Group:</strong> Friday 7:00 PM</li>
+                            <li class="mb-2"><strong>Bible Study:</strong> Wednesday 7:00 PM</li>
+                            <li><strong>Prayer Meeting:</strong> Friday 6:30 PM</li>
+                        </ul>
+                        
+                        <h4 class="mt-5 mb-3">Parking Information</h4>
+                        <p>Free parking is available in our church parking lot. Additional street parking is available on Faith Avenue and neighboring streets.</p>
+                        
+                        <a href="https://maps.app.goo.gl/example" class="btn btn-primary mt-4" target="_blank">
+                            <i class="fas fa-directions me-2"></i> Get Directions
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Staff Contacts -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Our Staff</h2>
+                <p class="lead text-muted">Meet the team ready to serve you</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" 
+                             class="card-img-top rounded-top" 
+                             alt="Pastor John Smith"
+                             style="height: 250px; object-fit: cover;">
+                        <div class="card-body text-center">
+                            <h4 class="card-title">Pastor John Smith</h4>
+                            <p class="text-primary mb-2">Senior Pastor</p>
+                            <p class="card-text">Leads our congregation with vision and passion for biblical teaching.</p>
+                            <a href="mailto:john@gracechurch.org" class="btn btn-sm btn-outline-primary mt-2">
+                                <i class="fas fa-envelope me-2"></i> Email
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=761&q=80" 
+                             class="card-img-top rounded-top" 
+                             alt="Pastor Sarah Johnson"
+                             style="height: 250px; object-fit: cover;">
+                        <div class="card-body text-center">
+                            <h4 class="card-title">Pastor Sarah Johnson</h4>
+                            <p class="text-primary mb-2">Associate Pastor</p>
+                            <p class="card-text">Oversees small groups and discipleship ministries.</p>
+                            <a href="mailto:sarah@gracechurch.org" class="btn btn-sm btn-outline-primary mt-2">
+                                <i class="fas fa-envelope me-2"></i> Email
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" 
+                             class="card-img-top rounded-top" 
+                             alt="Michael Brown"
+                             style="height: 250px; object-fit: cover;">
+                        <div class="card-body text-center">
+                            <h4 class="card-title">Michael Brown</h4>
+                            <p class="text-primary mb-2">Church Administrator</p>
+                            <p class="card-text">Manages church operations and facility scheduling.</p>
+                            <a href="mailto:michael@gracechurch.org" class="btn btn-sm btn-outline-primary mt-2">
+                                <i class="fas fa-envelope me-2"></i> Email
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% endblock %}

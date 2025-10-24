@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Our Congregations | CAAC Church{% endblock %}
+
+{% block content %}
+
+<style>
+    .congregation-hero {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        padding: 80px 0;
+        text-align: center;
+    }
+
+    .congregation-section {
+        padding: 60px 0;
+    }
+
+    .congregation-section:nth-child(even) {
+        background: #f8f9fa;
+    }
+
+    .congregation-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .congregation-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 2rem;
+        color: white;
+    }
+
+    .english-icon {
+        background: var(--primary);
+    }
+
+    .mandarin-icon {
+        background: #e67e22;
+    }
+
+    .cantonese-icon {
+        background: #3498db;
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="congregation-hero">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-3">Our Congregations</h1>
+        <p class="lead">One Church Family, Multiple Languages</p>
+    </div>
+</section>
+
+<!-- English Congregation Section -->
+<section class="congregation-section">
+    <div class="container">
+        <div class="congregation-header">
+            <div class="congregation-icon english-icon">
+                <i class="fas fa-globe"></i>
+            </div>
+            <h2>English Congregation</h2>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="info-card">
+                    <p class="lead mb-4">Our English congregation is the primary worship community at CAAC Church, serving as the central hub for our church family's activities and ministries.</p>
+                    
+                    <p>We gather every Sunday at 9:15 AM for worship that blends contemporary music with timeless biblical teaching. Our services are conducted entirely in English, making them accessible to the wider community and international visitors.</p>
+                    
+                    <p>The English congregation is characterized by its diverse membership, including young professionals, families, students, and long-term residents from various cultural backgrounds. We place strong emphasis on community building through small groups, Bible studies, and fellowship events.</p>
+                    
+                    <p>Our ministries include:</p>
+                    <ul>
+                        <li>Sunday worship services with children's programs</li>
+                        <li>Weekly Bible study groups</li>
+                        <li>Youth ministry for teenagers</li>
+                        <li>Young adults fellowship</li>
+                        <li>Men's and women's ministries</li>
+                        <li>Community outreach programs</li>
+                    </ul>
+                    
+                    <p>Whether you're new to faith or have been following Christ for years, you'll find a welcoming community where you can grow spiritually and build meaningful relationships.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mandarin Congregation Section -->
+<section class="congregation-section">
+    <div class="container">
+        <div class="congregation-header">
+            <div class="congregation-icon mandarin-icon">
+                <i class="fas fa-language"></i>
+            </div>
+            <h2>Mandarin Congregation</h2>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="info-card">
+                    <p class="lead mb-4">Our Mandarin congregation provides a spiritual home for Chinese-speaking believers and seekers in our community.</p>
+                    
+                    <p>This congregation meets every Sunday at 10:00 AM for worship services conducted entirely in Mandarin. The services feature traditional hymns and contemporary worship songs in Chinese, along with biblical preaching that addresses the unique needs and questions of the Mandarin-speaking community.</p>
+                    
+                    <p>The Mandarin congregation serves primarily first-generation Chinese immigrants and their families, creating a comfortable environment where people can worship God in their heart language while maintaining cultural connections.</p>
+                    
+                    <p>Key aspects of our Mandarin ministry include:</p>
+                    <ul>
+                        <li>Sunday worship in Mandarin</li>
+                        <li>Chinese Bible study groups</li>
+                        <li>Fellowship meals and cultural events</li>
+                        <li>Support for new immigrants</li>
+                        <li>Children's Chinese language classes</li>
+                    </ul>
+                    
+                    <p>While operating primarily in Mandarin, this congregation actively participates in church-wide events and maintains close ties with the broader church family, embodying our commitment to being one church in multiple languages.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Cantonese Congregation Section -->
+<section class="congregation-section">
+    <div class="container">
+        <div class="congregation-header">
+            <div class="congregation-icon cantonese-icon">
+                <i class="fas fa-globe-asia"></i>
+            </div>
+            <h2>Cantonese Congregation</h2>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="info-card">
+                    <p class="lead mb-4">The Cantonese congregation serves our community members who speak Cantonese as their primary language, offering worship and fellowship in a familiar cultural context.</p>
+                    
+                    <p>This congregation gathers for worship every Sunday at 10:00 AM, with services conducted entirely in Cantonese. The worship style blends traditional elements with contemporary approaches, creating a meaningful experience for Cantonese speakers of all ages.</p>
+                    
+                    <p>The Cantonese congregation particularly serves older generations and families who maintain Cantonese as their home language, while also welcoming anyone who prefers worship in Cantonese. The community is known for its warm hospitality and strong intergenerational bonds.</p>
+                    
+                    <p>Ministry highlights include:</p>
+                    <ul>
+                        <li>Cantonese language worship services</li>
+                        <li>Traditional Chinese Christian fellowship</li>
+                        <li>Elder care and support ministries</li>
+                        <li>Family-oriented activities and events</li>
+                        <li>Cantonese Christian education</li>
+                    </ul>
+                    
+                    <p>The Cantonese congregation plays a vital role in our church's diversity, representing the rich heritage of Cantonese-speaking Christians while fully participating in the unified mission of our church.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Unified Mission Section -->
+<section class="congregation-section">
+    <div class="container">
+        <div class="congregation-header">
+            <h2>One Church Family</h2>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="info-card text-center">
+                    <p class="lead">While we worship in different languages, we are united as one church family under the lordship of Jesus Christ.</p>
+                    
+                    <p>All three congregations share the same core beliefs, mission, and values. We regularly come together for combined worship services, church-wide events, community outreach, and leadership training. Our unity in diversity reflects the biblical vision of the church as one body with many parts.</p>
+                    
+                    <p>Whether you join us for English, Mandarin, or Cantonese services, you are welcome into the full life of our church family. We celebrate our cultural diversity while maintaining our spiritual unity in Christ.</p>
+                    
+                    <div class="mt-4">
+                        <a href="{% url 'contact' %}" class="btn btn-primary btn-lg me-3">
+                            <i class="fas fa-envelope me-2"></i> Contact Us
+                        </a>
+                        <a href="#" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-calendar me-2"></i> Visit This Sunday
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

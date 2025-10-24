@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{% trans "Discussions in" %} {{ category.name }}</h2>
+    
+    <div class="list-group mt-3">
+        {% for discussion in discussions %}
+        <a href="{% url 'discussion_detail' discussion.pk %}" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{ discussion.title }}</h5>
+                {% if discussion.is_pinned %}
+                <span class="badge bg-warning text-dark">{% trans "Pinned" %}</span>
+                {% endif %}
+            </div>
+            <p class="mb-1">{{ discussion.content|truncatewords:30 }}</p>
+            <small class="text-muted">
+                {% blocktrans with author=discussion.author.username date=discussion.created_at|date:"DATETIME_FORMAT" %}
+                Posted by {{ author }} on {{ date }}
+                {% endblocktrans %}
+            </small>
+        </a>
+        {% empty %}
+        <div class="alert alert-info">
+            {% trans "No discussions in this category yet." %}
+        </div>
+        {% endfor %}
+    </div>
+    
+    <a href="{% url 'discussion_list' %}" class="btn btn-secondary mt-3">
+        {% trans "Back to all discussions" %}
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ discussion.title }} | {{ church_name }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/forum.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="forum-section py-5">
+    <div class="container">
+        <!-- Discussion Header -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h2>{{ discussion.title }}</h2>
+                <div>
+                    <button class="btn btn-sm btn-outline-secondary like-btn" 
+                            data-url="{% url 'like_discussion' discussion.pk %}">
+                        <i class="far fa-heart"></i> 
+                        <span class="like-count">{{ discussion.likes.count }}</span>
+                    </button>
+                    {% if request.user == discussion.author %}
+                        <a href="{% url 'edit_discussion' discussion.pk %}" class="btn btn-sm btn-outline-primary ms-2">
+                            <i class="fas fa-edit me-1"></i> {% trans "Edit" %}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card-body">
+                <!-- Author Info and Content -->
+                <div class="d-flex mb-4">
+                    <div class="flex-shrink-0">
+                        {% if discussion.author.userprofile.avatar %}
+                            <img src="{{ discussion.author.userprofile.avatar.url }}" 
+                                 class="rounded-circle" width="50" height="50" 
+                                 alt="{{ discussion.author.username }}">
+                        {% else %}
+                            <img src="{% static 'images/default-avatar.png' %}" 
+                                 class="rounded-circle" width="50" height="50" 
+                                 alt="Default avatar">
+                        {% endif %}
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h5 class="mt-0">
+                            {{ discussion.author.get_full_name|default:discussion.author.username }}
+                            <small class="text-muted">@{{ discussion.author.username }}</small>
+                        </h5>
+                        <small class="text-muted">
+                            <i class="far fa-clock"></i> {{ discussion.created_at|date:"F j, Y H:i" }}
+                            {% if discussion.updated_at != discussion.created_at %}
+                                ({% trans "edited" %} {{ discussion.updated_at|timesince }} {% trans "ago" %})
+                            {% endif %}
+                        </small>
+                        <div class="mt-3">
+                            {{ discussion.content|linebreaks }}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Category and Tags -->
+                <div class="mt-3">
+                    {% if discussion.category %}
+                    <span class="badge bg-primary">
+                        <i class="{{ discussion.category.icon }} me-1"></i>
+                        {{ discussion.category.name }}
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="mb-0">
+                    <i class="far fa-comments me-2"></i>
+                    {% trans "Comments" %} ({{ discussion.comments.count }})
+                </h4>
+            </div>
+            
+            <div class="card-body">
+                <!-- Comment Form -->
+                {% if request.user.is_authenticated %}
+                <form method="post" class="mb-4">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <textarea class="form-control" name="content" rows="3" 
+                                  placeholder="{% trans 'Add your comment...' %}" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-2">
+                        <i class="fas fa-paper-plane me-2"></i> {% trans "Post Comment" %}
+                    </button>
+                </form>
+                {% else %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    {% trans "Please" %} <a href="{% url 'login' %}?next={{ request.path }}">{% trans "login" %}</a> {% trans "to post a comment" %}.
+                </div>
+                {% endif %}
+
+
+                <div class="card-header d-flex justify-content-between align-items-center">
+    <h2>{{ discussion.title }}</h2>
+    <div>
+        <button class="btn btn-sm btn-outline-secondary like-btn" 
+                data-url="{% url 'like_discussion' discussion.pk %}">
+            <i class="far fa-heart"></i> 
+            <span class="like-count">{{ discussion.likes.count }}</span>
+        </button>
+        {% if request.user == discussion.author %}
+            <a href="{% url 'edit_discussion' discussion.pk %}" class="btn btn-sm btn-outline-primary ms-2">
+                <i class="fas fa-edit me-1"></i> {% trans "Edit" %}
+            </a>
+        {% endif %}
+    </div>
+</div>
+                
+                <!-- Comments List -->
+                {% for comment in discussion.comments.all %}
+                <div class="d-flex mb-4">
+                    <div class="flex-shrink-0">
+                        {% if comment.author.userprofile.avatar %}
+                            <img src="{{ comment.author.userprofile.avatar.url }}" 
+                                 class="rounded-circle" width="40" height="40" 
+                                 alt="{{ comment.author.username }}">
+                        {% else %}
+                            <img src="{% static 'images/default-avatar.png' %}" 
+                                 class="rounded-circle" width="40" height="40" 
+                                 alt="Default avatar">
+                        {% endif %}
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="mt-0 mb-1">
+                            {{ comment.author.get_full_name|default:comment.author.username }}
+                            <small class="text-muted">@{{ comment.author.username }}</small>
+                        </h6>
+                        <small class="text-muted">
+                            <i class="far fa-clock"></i> {{ comment.created_at|date:"F j, Y H:i" }}
+                        </small>
+                        <div class="mt-2">
+                            {{ comment.content|linebreaks }}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-3">
+                    <i class="far fa-comment-dots fa-2x text-muted mb-2"></i>
+                    <p class="text-muted">{% trans "No comments yet. Be the first to comment!" %}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Back to Discussions Link -->
+        <div class="text-center mt-3">
+            <a href="{% url 'discussion_list' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i> {% trans "Back to Discussions" %}
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Like button functionality
+    $('.like-btn').click(function(e) {
+        e.preventDefault();
+        var btn = $(this);
+        $.ajax({
+            url: btn.data('url'),
+            type: 'POST',
+            data: {
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(data) {
+                btn.find('.like-count').text(data.likes_count);
+                if(data.is_liked) {
+                    btn.removeClass('btn-outline-secondary').addClass('btn-danger');
+                    btn.find('i').removeClass('far').addClass('fas');
+                } else {
+                    btn.removeClass('btn-danger').addClass('btn-outline-secondary');
+                    btn.find('i').removeClass('fas').addClass('far');
+                }
+            },
+            error: function(xhr) {
+                if(xhr.status == 403) {
+                    window.location.href = "{% url 'login' %}?next={{ request.path }}";
+                }
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

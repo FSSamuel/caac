@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4>Your Notifications</h4>
+                    <a href="#" class="btn btn-sm btn-outline-primary" onclick="markAllAsRead()">Mark all as read</a>
+                </div>
+                <div class="list-group list-group-flush">
+                    {% for notification in notifications %}
+                    <a href="{% if notification.link %}{{ notification.link }}{% else %}#{% endif %}" 
+                       class="list-group-item list-group-item-action {% if not notification.is_read %}list-group-item-primary{% endif %}"
+                       onclick="markNotificationAsRead({{ notification.id }})">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ notification.message }}</h6>
+                            <small>{{ notification.created_at|timesince }} ago</small>
+                        </div>
+                        <small class="text-muted">{{ notification.get_notification_type_display }}</small>
+                    </a>
+                    {% empty %}
+                    <div class="list-group-item">
+                        <p class="text-muted mb-0">No notifications yet.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% if is_paginated %}
+                <div class="card-footer">
+                    {% include 'includes/pagination.html' %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function markAllAsRead() {
+    fetch('/notifications/mark-all-as-read/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Accept': 'application/json',
+        },
+    }).then(response => {
+        if (response.ok) {
+            window.location.reload();
+        }
+    });
+    return false;
+}
+</script>
+{% endblock %}

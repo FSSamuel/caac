@@ -1,0 +1,334 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Next Steps | CAAC Church{% endblock %}
+
+{% block content %}
+
+<style>
+    .next-steps-hero {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        padding: 80px 0;
+        text-align: center;
+    }
+
+    .step-section {
+        padding: 60px 0;
+    }
+
+    .step-section:nth-child(even) {
+        background: #f8f9fa;
+    }
+
+    .step-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .step-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 2rem;
+        color: white;
+    }
+
+    .new-icon {
+        background: var(--primary);
+    }
+
+    .connect-icon {
+        background: #28a745;
+    }
+
+    .serve-icon {
+        background: #dc3545;
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+
+    .action-steps {
+        background: #e9ecef;
+        border-radius: 10px;
+        padding: 25px;
+        margin: 25px 0;
+    }
+
+    .step-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .step-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .step-number {
+        background: var(--primary);
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-right: 15px;
+        flex-shrink: 0;
+    }
+</style>
+
+<!-- Hero Section -->
+<section class="next-steps-hero">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-3">Your Next Steps</h1>
+        <p class="lead">Growing Together in Faith and Community</p>
+    </div>
+</section>
+
+<!-- I'm New Section -->
+<section class="step-section">
+    <div class="container">
+        <div class="step-header">
+            <div class="step-icon new-icon">
+                <i class="fas fa-church"></i>
+            </div>
+            <h2>I'm New</h2>
+            <p class="lead">Find service times, directions, and what to expect on your first visit</p>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="info-card">
+                    <p class="lead mb-4">Welcome! We're so glad you're considering visiting CAAC Church. Whether you're exploring faith for the first time or looking for a new church home, we want your first visit to be comfortable and meaningful.</p>
+                    
+                    <div class="action-steps">
+                        <h4 class="mb-4">Your First Visit</h4>
+                        
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div>
+                                <h5>Plan Your Visit</h5>
+                                <p class="mb-0">Check our service times and location. Sunday services are at 9:15 AM (English) and 10:00 AM (Mandarin & Cantonese). We're located at ISAACS Community Center with plenty of parking available.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div>
+                                <h5>What to Expect</h5>
+                                <p class="mb-0">Our services typically last about 90 minutes and include worship music, biblical teaching, and time for community connection. Dress comfortably - you'll see everything from casual to business casual attire.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div>
+                                <h5>For Your Family</h5>
+                                <p class="mb-0">We have excellent programs for children and youth during our services. Our nursery cares for infants and toddlers, while children ages 3-12 enjoy age-appropriate Bible lessons and activities.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4>Service Details</h4>
+                    <p><strong>English Service:</strong> Sundays at 9:15 AM - Contemporary worship with relevant biblical teaching for all ages.</p>
+                    <p><strong>Mandarin Service:</strong> Sundays at 10:00 AM - Worship and teaching in Mandarin for Chinese-speaking community.</p>
+                    <p><strong>Cantonese Service:</strong> Sundays at 10:00 AM - Traditional worship and fellowship in Cantonese.</p>
+                    
+                    <p>When you arrive, look for our welcome team wearing "Welcome" badges. They'll help you find your way around, introduce you to others, and answer any questions you might have.</p>
+                    
+                    <div class="text-center mt-4">
+                        <a href="#" class="btn btn-primary me-3">
+                            <i class="fas fa-directions me-2"></i> Get Directions
+                        </a>
+                        <a href="{% url 'contact' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-question-circle me-2"></i> Ask Questions
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Get Connected Section -->
+<section class="step-section">
+    <div class="container">
+        <div class="step-header">
+            <div class="step-icon connect-icon">
+                <i class="fas fa-hands-helping"></i>
+            </div>
+            <h2>Get Connected</h2>
+            <p class="lead">Grow in your faith and find community through our life groups and ministries</p>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="info-card">
+                    <p class="lead mb-4">Real life change happens in the context of relationships. Getting connected means finding your place in our church family and growing together with others on the same journey.</p>
+                    
+                    <div class="action-steps">
+                        <h4 class="mb-4">Ways to Connect</h4>
+                        
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div>
+                                <h5>Join a Life Group</h5>
+                                <p class="mb-0">Small groups that meet weekly in homes for Bible study, prayer, and friendship. We have groups for all ages and stages of life.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div>
+                                <h5>Attend a Newcomers Lunch</h5>
+                                <p class="mb-0">Monthly gatherings where you can meet our pastors and other new attendees in a casual setting.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div>
+                                <h5>Explore Our Ministries</h5>
+                                <p class="mb-0">From men's and women's ministries to youth programs and senior fellowship, there's a place for everyone.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4>Ministry Opportunities</h4>
+                    <p><strong>Men's Ministry:</strong> Monthly breakfasts, Bible studies, and service projects that build strong Christian men.</p>
+                    <p><strong>Women's Ministry:</strong> Weekly Bible studies, retreats, and special events designed to encourage and equip women.</p>
+                    <p><strong>Youth Ministry:</strong> Dynamic programs for middle and high school students including weekly gatherings, camps, and mission trips.</p>
+                    <p><strong>Young Adults:</strong> Community for those in their 20s and 30s navigating career, relationships, and faith.</p>
+                    <p><strong>Seniors Fellowship:</strong> Monthly luncheons, day trips, and service opportunities for our mature members.</p>
+                    
+                    <p>The best way to get started is to fill out a connection card on Sunday or contact our church office. We'll help you find the right group or ministry based on your interests and stage of life.</p>
+                    
+                    <div class="text-center mt-4">
+                        <a href="#" class="btn btn-success me-3">
+                            <i class="fas fa-users me-2"></i> Find a Group
+                        </a>
+                        <a href="#" class="btn btn-outline-success">
+                            <i class="fas fa-calendar me-2"></i> View Events
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Serve Others Section -->
+<section class="step-section">
+    <div class="container">
+        <div class="step-header">
+            <div class="step-icon serve-icon">
+                <i class="fas fa-heart"></i>
+            </div>
+            <h2>Serve Others</h2>
+            <p class="lead">Discover your gifts and make a difference by serving in and outside the church</p>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="info-card">
+                    <p class="lead mb-4">Every member is a minister. Serving is how we live out our faith and make a real difference in our church, community, and world.</p>
+                    
+                    <div class="action-steps">
+                        <h4 class="mb-4">How to Get Started Serving</h4>
+                        
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div>
+                                <h5>Discover Your Gifts</h5>
+                                <p class="mb-0">Take our spiritual gifts assessment to understand how God has uniquely equipped you to serve.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div>
+                                <h5>Explore Opportunities</h5>
+                                <p class="mb-0">Learn about the various serving teams and ministries where you can make a difference.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div>
+                                <h5>Start Serving</h5>
+                                <p class="mb-0">Join a serving team that matches your gifts, passions, and availability.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4>Serving Opportunities</h4>
+                    <p><strong>Sunday Service Teams:</strong> Welcome team, audio/visual, worship team, children's ministry, hospitality.</p>
+                    <p><strong>Community Outreach:</strong> Food pantry volunteers, neighborhood clean-up, visiting nursing homes, ESL teachers.</p>
+                    <p><strong>Behind the Scenes:</strong> Administration, facility maintenance, graphic design, website support.</p>
+                    <p><strong>Global Missions:</strong> Short-term mission trips, supporting missionaries, prayer teams.</p>
+                    
+                    <p>You don't need special qualifications to start serving - just a willing heart. We provide training and support for every role. The best way to begin is to try out a serving opportunity that interests you.</p>
+                    
+                    <div class="text-center mt-4">
+                        <a href="#" class="btn btn-danger me-3">
+                            <i class="fas fa-hands-helping me-2"></i> Serve With Us
+                        </a>
+                        <a href="#" class="btn btn-outline-danger">
+                            <i class="fas fa-clipboard-list me-2"></i> View Opportunities
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Section -->
+<section class="step-section">
+    <div class="container">
+        <div class="step-header">
+            <h2>Ready to Take Your Next Step?</h2>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="info-card text-center">
+                    <p class="lead">Wherever you are in your spiritual journey, there's a next step for you.</p>
+                    
+                    <p>We believe that everyone has a next step to take in their relationship with God and involvement in the church. Whether you're just starting to explore faith or you're ready to dive deep into serving, we're here to help you take that next step.</p>
+                    
+                    <p>Fill out our online connection form, talk to one of our pastors on Sunday, or contact the church office. We'll help you identify your next step and connect you with the right people and resources.</p>
+                    
+                    <div class="mt-4">
+                        <a href="{% url 'contact' %}" class="btn btn-primary btn-lg me-3">
+                            <i class="fas fa-envelope me-2"></i> Contact Us
+                        </a>
+                        <a href="#" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-file-alt me-2"></i> Connection Form
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

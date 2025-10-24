@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Prayer Requests | {{ church_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'forum' %}">Forum</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Prayer Requests</li>
+                </ol>
+            </nav>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-praying-hands me-2"></i> Prayer Requests</h2>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'create_post' %}?category={{ category.id }}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i> New Request
+                    </a>
+                {% endif %}
+            </div>
+
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                Please share your prayer needs and pray for others in our community.
+            </div>
+
+            {% if prayer_posts %}
+            <div class="list-group">
+                {% for post in prayer_posts %}
+                <div class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h5 class="mb-1">{{ post.title }}</h5>
+                        <small class="text-muted">{{ post.created_at|date:"M d, Y" }}</small>
+                    </div>
+                    <p class="mb-2">{{ post.content }}</p>
+                    <div class="d-flex justify-content-between">
+                        <small class="text-muted">
+                            Request by {{ post.author.get_full_name|default:post.author.username }}
+                        </small>
+                        <small class="text-muted">
+                            {{ post.comment_set.count }} prayer{{ post.comment_set.count|pluralize }}
+                        </small>
+                    </div>
+                    
+                    {% if post.comment_set.exists %}
+                    <div class="mt-3 ps-3 border-start">
+                        <h6 class="text-muted">Prayers:</h6>
+                        {% for comment in post.comment_set.all %}
+                        <div class="mb-2">
+                            <strong>{{ comment.author.get_full_name|default:comment.author.username }}</strong>
+                            <small class="text-muted ms-2">{{ comment.created_at|date:"M d" }}</small>
+                            <p class="mb-0">{{ comment.content }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-pray fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No prayer requests yet</h4>
+                <p class="text-muted">Be the first to share a prayer need</p>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'create_post' %}?category={{ category.id }}" class="btn btn-primary mt-3">
+                        <i class="fas fa-plus me-2"></i> Share a Request
+                    </a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

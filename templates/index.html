@@ -1,0 +1,873 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}Welcome | CAAC Church{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+
+ <style>
+        :root {
+            --primary: #4b6cb7;
+            --secondary: #182848;
+            --light: #f8f9fa;
+            --mandarin-color: #e67e22;
+            --cantonese-color: #3498db;
+            --english-color: #9b59b6;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                        url('https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover !important;
+            background-position: center !important;
+            min-height: 60vh;
+            color: white;
+        }
+
+        .service-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .congregation-card {
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 30px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            height: 100%;
+        }
+        
+        .congregation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .card-header {
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .mandarin-header {
+            background-color: var(--mandarin-color);
+        }
+        
+        .cantonese-header {
+            background-color: var(--cantonese-color);
+        }
+        
+        .english-header {
+            background-color: var(--english-color);
+        }
+        
+        .btn-visit {
+            width: 100%;
+            padding: 10px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-mandarin {
+            background-color: var(--mandarin-color);
+        }
+        
+        .btn-mandarin:hover {
+            background-color: #d35400;
+        }
+        
+        .btn-cantonese {
+            background-color: var(--cantonese-color);
+        }
+        
+        .btn-cantonese:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-english {
+            background-color: var(--english-color);
+        }
+        
+        .btn-english:hover {
+            background-color: #8e44ad;
+        }
+        
+        .section-title {
+            position: relative;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+    
+
+
+/* Congregation Section Styles */
+.congregation-section {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+.congregation-section .section-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 3rem;
+    color: var(--secondary);
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.congregation-section .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 5px;
+    background: linear-gradient(90deg, var(--primary), #8B0000);
+    border-radius: 3px;
+}
+
+/* Congregation Cards */
+.congregation-section .col-md-4 {
+    margin-bottom: 2rem;
+}
+
+.congregation-card {
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    border-radius: 20px;
+    box-shadow: 
+        0 8px 25px rgba(0,0,0,0.1),
+        0 4px 6px rgba(0,0,0,0.05);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    height: 100%;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.congregation-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), #8B0000);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.congregation-card:hover::before {
+    transform: scaleX(1);
+}
+
+.congregation-card:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 
+        0 20px 40px rgba(75, 108, 183, 0.15),
+        0 8px 15px rgba(0,0,0,0.1);
+    border-color: var(--primary);
+}
+
+/* Card Header Styles */
+.card-header {
+    color: white;
+    padding: 25px 20px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 20px 20px 0 0 !important;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: rotate(45deg);
+    transition: all 0.6s ease;
+}
+
+.congregation-card:hover .card-header::before {
+    transform: rotate(45deg) translate(50%, 50%);
+}
+
+.congregation-card:hover .card-header {
+    padding: 28px 20px;
+}
+
+.mandarin-header {
+    background: linear-gradient(135deg, #e67e22, #d35400) !important;
+}
+
+.cantonese-header {
+    background: linear-gradient(135deg, #3498db, #2980b9) !important;
+}
+
+.english-header {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad) !important;
+}
+
+.card-header i {
+    font-size: 1.8rem;
+    margin-right: 10px;
+    transition: all 0.4s ease;
+}
+
+.congregation-card:hover .card-header i {
+    transform: scale(1.2) rotate(5deg);
+}
+
+.card-header h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    transition: all 0.4s ease;
+}
+
+.congregation-card:hover .card-header h3 {
+    transform: scale(1.05);
+}
+
+/* Card Body Styles */
+.congregation-card .card-body {
+    padding: 30px 25px;
+    position: relative;
+}
+
+.service-time, .location {
+    color: #5a6c7d;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.congregation-card:hover .service-time,
+.congregation-card:hover .location {
+    color: var(--secondary);
+    transform: translateX(5px);
+}
+
+.service-time i, .location i {
+    color: var(--primary);
+    width: 20px;
+    transition: all 0.3s ease;
+}
+
+.congregation-card:hover .service-time i,
+.congregation-card:hover .location i {
+    transform: scale(1.2);
+    color: #8B0000;
+}
+
+.congregation-card .card-text {
+    color: #5a6c7d;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    font-weight: 400;
+    transition: all 0.3s ease;
+}
+
+.congregation-card:hover .card-text {
+    color: var(--secondary);
+}
+
+/* Button Styles */
+.btn-visit {
+    border: 2px solid transparent;
+    border-radius: 30px;
+    padding: 12px 30px;
+    font-weight: 600;
+    transition: all 0.4s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    width: 100%;
+    font-size: 1rem;
+}
+
+.btn-visit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255,255,255,0.2), rgba(255,255,255,0.4), rgba(255,255,255,0.2));
+    transition: left 0.4s ease;
+    z-index: -1;
+}
+
+.btn-visit:hover::before {
+    left: 0;
+}
+
+.btn-visit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    border-color: rgba(255,255,255,0.5);
+}
+
+.btn-mandarin {
+    background: linear-gradient(135deg, #e67e22, #d35400);
+    color: white;
+}
+
+.btn-cantonese {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+}
+
+.btn-english {
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    color: white;
+}
+
+.btn-visit i {
+    margin-right: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-visit:hover i {
+    transform: translateX(5px) scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .congregation-section .section-title {
+        font-size: 2.2rem;
+    }
+    
+    .card-header h3 {
+        font-size: 1.3rem;
+    }
+    
+    .congregation-card .card-body {
+        padding: 20px 15px;
+    }
+}
+
+/* Animation for section entrance */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.congregation-section .col-md-4 {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.congregation-section .col-md-4:nth-child(1) { animation-delay: 0.1s; }
+.congregation-section .col-md-4:nth-child(2) { animation-delay: 0.2s; }
+.congregation-section .col-md-4:nth-child(3) { animation-delay: 0.3s; }
+
+
+
+
+
+
+        
+/* Next Steps Cards */
+.next-steps .col-md-4 {
+    margin-bottom: 2rem;
+}
+
+.next-steps .p-4 {
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    border-radius: 20px;
+    box-shadow: 
+        0 8px 25px rgba(0,0,0,0.1),
+        0 4px 6px rgba(0,0,0,0.05);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    height: 100%;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.next-steps .p-4::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), #8B0000);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.next-steps .p-4:hover::before {
+    transform: scaleX(1);
+}
+
+.next-steps .p-4:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 
+        0 20px 40px rgba(75, 108, 183, 0.15),
+        0 8px 15px rgba(0,0,0,0.1);
+    border-color: var(--primary);
+}
+
+/* Icon Box Styles for Next Steps */
+.next-steps .icon-box {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, var(--primary), #6c8cd5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    transition: all 0.4s ease;
+    box-shadow: 0 8px 20px rgba(75, 108, 183, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.next-steps .icon-box::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: rotate(45deg);
+    transition: all 0.6s ease;
+}
+
+.next-steps .p-4:hover .icon-box::before {
+    transform: rotate(45deg) translate(50%, 50%);
+}
+
+.next-steps .p-4:hover .icon-box {
+    background: linear-gradient(135deg, #8B0000, #a83232);
+    transform: scale(1.15) rotate(5deg);
+    box-shadow: 0 12px 25px rgba(139, 0, 0, 0.4);
+}
+
+.next-steps .icon-box i {
+    color: white;
+    font-size: 2.5rem;
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.next-steps .p-4:hover .icon-box i {
+    transform: scale(1.2);
+    color: white;
+}
+
+/* Text Styles */
+.next-steps h3 {
+    color: var(--secondary);
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    font-size: 1.6rem;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.next-steps h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 2px;
+    background: var(--primary);
+    transition: width 0.3s ease;
+}
+
+.next-steps .p-4:hover h3::after {
+    width: 80px;
+}
+
+.next-steps p {
+    color: #5a6c7d;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    font-weight: 400;
+}
+
+/* Button Styles */
+.next-steps .btn-outline-primary {
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    border-radius: 30px;
+    padding: 12px 30px;
+    font-weight: 600;
+    transition: all 0.4s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.next-steps .btn-outline-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), #8B0000);
+    transition: left 0.4s ease;
+    z-index: -1;
+}
+
+.next-steps .btn-outline-primary:hover::before {
+    left: 0;
+}
+
+.next-steps .btn-outline-primary:hover {
+    color: white;
+    border-color: transparent;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(75, 108, 183, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 2.2rem;
+    }
+    
+    .next-steps .icon-box {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .next-steps .icon-box i {
+        font-size: 2rem;
+    }
+    
+    .next-steps h3 {
+        font-size: 1.4rem;
+    }
+}
+
+/* Animation for section entrance */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.next-steps .col-md-4 {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.next-steps .col-md-4:nth-child(1) { animation-delay: 0.1s; }
+.next-steps .col-md-4:nth-child(2) { animation-delay: 0.2s; }
+.next-steps .col-md-4:nth-child(3) { animation-delay: 0.3s; }
+        
+  
+        
+    </style>
+
+
+
+
+
+
+
+    <section class="hero d-flex align-items-center" 
+         style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                url('https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+                background-size: cover;
+                background-position: center;
+                min-height: 60vh; color: white;">
+  <div class="container">
+    <div class="row align-items-center">
+      <!-- Left Column (Welcome Content) -->
+      <div class="col-lg-6">
+        <h1 class="display-3 fw-bold mb-4">{%trans "Welcome Home" %}</h1>
+        <p class="lead mb-4">Where faith, hope, and love come together</p>
+        
+        <div class="service-card p-4 mb-4">
+          <h3><i class="fas fa-clock me-2"></i> Service Times</h3>
+          <ul class="list-unstyled">
+            <li class="mb-2"><i class="fas fa-sun me-2"></i> Sunday Worship: 9:30 AM</li>
+            <li class="mb-2"><i class="fas fa-bible me-2"></i> Bible Study: Wednesday 7:00 PM</li>
+            <li><i class="fas fa-pray me-2"></i> Prayer Meeting: Friday 6:30 PM</li>
+          </ul>
+        </div>
+        
+        <div class="d-flex flex-wrap gap-3">
+          <a href="#" class="btn btn-primary btn-lg px-4 py-2">
+            <i class="fas fa-directions me-2"></i> Visit Us
+          </a>
+          <a href="#" class="btn btn-outline-light btn-lg px-4 py-2">
+            <i class="fas fa-video me-2"></i> Watch Online
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column - Devotional Widget -->
+<div class="col-lg-6 d-flex justify-content-end">
+  <div style="border-left:4px solid #8B0000; padding:20px; width:100%; max-width:350px; border-radius:4px;">
+    
+    <h4 style="color:#8B0000; margin-top:0; font-family:'Georgia', serif;">
+      <i class="fas fa-bible"></i> Today's Inspiration
+    </h4>
+
+    <!-- Bible Verse -->
+    <div id="verse-container" style="font-style:italic; margin:15px 0; min-height:80px;">
+      <div class="loading-spinner" style="text-align:center;">
+        <i class="fas fa-spinner fa-spin"></i> Loading verse...
+      </div>
+      <!-- Fallback content -->
+      <div class="fallback-verse" style="display:none; font-style:italic;">
+        "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future."<br>
+        <strong>— Jeremiah 29:11 (NIV)</strong>
+      </div>
+    </div>
+
+    <!-- Inspirational Quote -->
+    <div id="quote-container" style="border-top:1px dashed #ddd; padding-top:15px; min-height:60px;">
+      <div class="loading-spinner" style="text-align:center;">
+        <i class="fas fa-spinner fa-spin"></i> Loading quote...
+      </div>
+      <!-- Fallback content -->
+      <div class="fallback-quote" style="display:none; font-style:italic;">
+        "Faith is taking the first step even when you don't see the whole staircase."<br>
+        <strong>— Martin Luther King Jr.</strong>
+      </div>
+    </div>
+
+    <!-- Refresh Button -->
+    <button onclick="loadDevotionalContent()" 
+            style="background:#8B0000; color:white; border:none; padding:6px 12px; border-radius:3px; margin-top:10px; cursor:pointer;">
+      <i class="fas fa-sync-alt"></i> Refresh Content
+    </button>
+
+    <!-- JavaScript -->
+    <script>
+    // Font Awesome (if not already loaded)
+    if (!document.querySelector('script[src*="font-awesome"]')) {
+      const faScript = document.createElement('script');
+      faScript.src = 'https://kit.fontawesome.com/a076d05399.js';
+      document.head.appendChild(faScript);
+    }
+
+    async function loadDevotionalContent() {
+      try {
+        // Show loading states
+        document.querySelectorAll('.loading-spinner').forEach(el => el.style.display = 'block');
+        document.querySelectorAll('.fallback-verse, .fallback-quote').forEach(el => el.style.display = 'none');
+        
+        // 1. Load Bible Verse (Alternative API)
+        const verseResponse = await fetch('https://bible-api.com/?random=verse');
+        const verseData = await verseResponse.json();
+        document.querySelector('#verse-container').innerHTML = 
+          `"${verseData.text}"<br><strong>— ${verseData.reference}</strong>`;
+        
+        // 2. Load Quote (Alternative API)
+        const quotes = [
+          "Prayer is not asking. It is a longing of the soul. - Mother Teresa",
+          "God's work done in God's way will never lack God's supply. - Hudson Taylor",
+          "The will of God will never take you where the grace of God cannot sustain you. - Billy Graham"
+        ];
+        document.querySelector('#quote-container').innerHTML = 
+          `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+          
+      } catch (error) {
+        console.error("Error loading content:", error);
+        document.querySelectorAll('.loading-spinner').forEach(el => el.style.display = 'none');
+        document.querySelector('#verse-container .fallback-verse').style.display = 'block';
+        document.querySelector('#quote-container .fallback-quote').style.display = 'block';
+      }
+    }
+    
+    // Load on page open
+    window.addEventListener('DOMContentLoaded', loadDevotionalContent);
+    </script>
+  </div>
+</div>
+       
+  </div>
+</div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- Congregation Selection Section -->
+<section class="py-5 bg-light congregation-section">
+    <div class="container">
+        <h2 class="text-center section-title">Our Congregations</h2>
+            
+            <div class="row">
+                <!-- Mandarin Congregation -->
+                <div class="col-md-4">
+                    <div class="congregation-card">
+                        <div class="card-header mandarin-header">
+                            <i class="fas fa-language me-2"></i>
+                            <h3 class="d-inline">Mandarin Congregation</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="service-time">
+                                <i class="fas fa-clock me-2"></i> Sunday Service 10am
+                            </div>
+                            <div class="location mb-3">
+                                <i class="fas fa-map-marker-alt me-2"></i> 
+                                <strong>ISAACS</strong>
+                            </div>
+                            <p class="card-text">
+                                Join our vibrant Mandarin-speaking community for worship and fellowship.
+                            </p>
+                            <a href="{% url 'congregations' %}" class="btn btn-visit btn-mandarin">
+    <i class="fas fa-hand-point-right"></i> LEARN MORE
+</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cantonese Congregation -->
+                <div class="col-md-4">
+                    <div class="congregation-card">
+                        <div class="card-header cantonese-header">
+                            <i class="fas fa-globe-asia me-2"></i>
+                            <h3 class="d-inline">Cantonese Congregation</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="service-time">
+                                <i class="fas fa-clock me-2"></i> Sunday Service 10am
+                            </div>
+                            <div class="location mb-3">
+                                <i class="fas fa-map-marker-alt me-2"></i> 
+                                <strong>ISAACS</strong>
+                            </div>
+                            <p class="card-text">
+                                Experience worship in Cantonese with our warm and welcoming community.
+                            </p>
+                            <a href="{% url 'congregations' %}" class="btn btn-visit btn-cantonese">
+    <i class="fas fa-hand-point-right"></i> LEARN MORE
+</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- English Congregation -->
+                <div class="col-md-4">
+                    <div class="congregation-card">
+                        <div class="card-header english-header">
+                            <i class="fas fa-globe me-2"></i>
+                            <h3 class="d-inline">English Congregation</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="service-time">
+                                <i class="fas fa-clock me-2"></i> Sunday Service 9:15am
+                            </div>
+                            <div class="location mb-3">
+                                <i class="fas fa-map-marker-alt me-2"></i> 
+                                <strong>ISAACS</strong>
+                            </div>
+                            <p class="card-text">
+                                Our English service brings together people from diverse backgrounds.
+                            </p>
+                            <a href="{% url 'congregations' %}" class="btn btn-visit btn-english">
+                                <i class="fas fa-hand-point-right"></i> LEARN MORE</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   <!-- Next Steps Section -->
+<section class="py-5 next-steps">
+    <div class="container">
+        <h2 class="text-center section-title">Next Steps</h2>
+        
+        <div class="row text-center g-4">
+            <div class="col-md-4">
+                <div class="p-4">
+                    <div class="icon-box">
+                        <i class="fas fa-church"></i>
+                    </div>
+                    <h3>I'm New</h3>
+                    <p>Find service times, directions, and what to expect on your first visit.</p>
+                    <a href="{% url 'next_steps' %}" class="btn btn-outline-primary">Learn More</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4">
+                    <div class="icon-box">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h3>Get Connected</h3>
+                    <p>Grow in your faith and find community through our life groups and ministries.</p>
+                    <a href="{% url 'next_steps' %}" class="btn btn-outline-primary">Find a Group</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4">
+                    <div class="icon-box">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Serve Others</h3>
+                    <p>Discover your gifts and make a difference by serving in and outside the church.</p>
+                    <a href="{% url 'next_steps' %}" class="btn btn-outline-primary">Serve With Us</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+{% endblock %}

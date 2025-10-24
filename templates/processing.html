@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 text-center">
+            <div class="mb-4">
+                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <h2 class="mb-3">Processing Your Donation</h2>
+            <p class="lead mb-4">Please wait while we securely process your payment...</p>
+            <div id="payment-result"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+const stripe = Stripe('{{ stripe_key }}');
+const clientSecret = '{{ client_secret }}';
+
+stripe.retrievePaymentIntent(clientSecret).then(function(result) {
+    const paymentResult = document.getElementById('payment-result');
+    
+    if (result.error) {
+        paymentResult.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                ${result.error.message}
+            </div>
+            <a href="{% url 'giving' %}" class="btn btn-primary mt-3">
+                Try Again
+            </a>
+        `;
+    } else {
+        if (result.paymentIntent.status === 'succeeded') {
+            window.location.href = "{% url 'giving_thank_you' %}";
+        }
+    }
+});
+</script>
+{% endblock %}

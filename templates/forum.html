@@ -1,0 +1,608 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Church Community Forum" %} | {{ church_name }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/forum.css' %}">
+<style>
+    /* Add this to fix layout issues */
+    .forum-content {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .main-content {
+        flex: 0 0 66.666%;
+        max-width: 66.666%;
+        padding-right: 15px;
+    }
+    .sidebar {
+        flex: 0 0 33.333%;
+        max-width: 33.333%;
+        padding-left: 15px;
+    }
+    @media (max-width: 992px) {
+        .main-content, .sidebar {
+            flex: 0 0 100%;
+            max-width: 100%;
+            padding: 0;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="forum-section py-5">
+    <!-- User Authentication Bar -->
+    <div class="container">
+        <div class="d-flex justify-content-end mb-4">
+            {% if user.is_authenticated %}
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                        {% if user.userprofile.avatar %}
+                            <img src="{{ user.userprofile.avatar.url }}" class="rounded-circle me-2" width="28" height="28" alt="{{ user.username }}">
+                        {% else %}
+                            <img src="{% static 'images/default-avatar.png' %}" class="rounded-circle me-2" width="28" height="28" alt="Default avatar">
+                        {% endif %}
+                        <span class="d-none d-sm-inline">{{ user.username }}</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{% url 'user_profile' user.id %}">
+                            <i class="fas fa-user me-2"></i> {% trans "My Profile" %}
+                        </a></li>
+                        
+                        <li><a class="dropdown-item" href="{% url 'all_notifications' %}">
+                            <i class="fas fa-bell me-2"></i> {% trans "Notifications" %}
+                            {% if user.notifications.unread.count > 0 %}
+                                <span class="badge bg-danger ms-2">{{ user.notifications.unread.count }}</span>
+                            {% endif %}
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'logout'%}">
+                            <i class="fas fa-sign-out-alt me-2"></i> {% trans "Logout" %}
+                        </a></li>
+                    </ul>
+                </div>
+            {% else %}
+                <div class="auth-buttons">
+                    <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-outline-primary me-2">
+                        <i class="fas fa-sign-in-alt me-2"></i> {% trans "Login" %}
+                    </a>
+                    <a href="{% url 'register' %}" class="btn btn-primary">
+                        <i class="fas fa-user-plus me-2"></i> {% trans "Register" %}
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Forum Header and Search -->
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+            <div class="mb-3 mb-md-0">
+                <h1 class="h2 mb-2"><i class="fas fa-hands-praying me-2"></i> {% trans "Church Community Forum" %}</h1>
+                <p class="text-muted mb-0">{% trans "Join the conversation and grow together in faith" %}</p>
+            </div>
+            
+            <div class="d-flex">
+                <form class="me-2" method="get" action="#">
+                    <div class="input-group">
+                        <input type="search" class="form-control" placeholder="{% trans 'Search discussions...' %}" name="q" aria-label="Search">
+                        <button class="btn btn-outline-secondary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+                
+                {% if user.is_authenticated %}
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newTopicModal">
+                        <i class="fas fa-plus me-2"></i> {% trans "New Topic" %}
+                    </button>
+                {% else %}
+                    <button class="btn btn-primary" onclick="window.location.href='{% url 'login' %}?next={{ request.path }}'">
+                        <i class="fas fa-plus me-2"></i> {% trans "Login to Post" %}
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Forum Guidelines Alert -->
+        <div class="alert alert-info mb-4">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-info-circle fa-2x me-3"></i>
+                <div>
+                    <h5 class="alert-heading mb-1">{% trans "Forum Guidelines" %}</h5>
+                    <p class="mb-0 small">{% trans "Please keep discussions respectful and Christ-centered. No spam or offensive content." %} 
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#guidelinesModal">{% trans "View full guidelines" %}</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="forum-content">
+            <!-- Main Content -->
+            <div class="main-content">
+                {% if not user.is_authenticated %}
+                <div class="alert alert-warning mb-4">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    {% trans "You must be logged in to create new topics or reply to existing ones." %}
+                    <a href="{% url 'login' %}?next={{ request.path }}" class="alert-link">{% trans "Login here" %}</a> 
+                    {% trans "or" %} 
+                    <a href="{% url 'register' %}" class="alert-link">{% trans "register" %}</a>.
+                </div>
+                {% endif %}
+                
+                 <!-- Featured/Pinned Threads -->
+                {% if pinned_threads %}
+                <div class="card mb-4 border-warning">
+                    <div class="card-header bg-warning bg-opacity-10 d-flex align-items-center">
+                        <i class="fas fa-thumbtack text-warning me-2"></i>
+                        <span class="fw-bold">{% trans "Announcements & Featured Discussions" %}</span>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        {% for thread in pinned_threads %}
+                        <a href="{% url 'discussion_detail' thread.id %}" class="list-group-item list-group-item-action position-relative">
+                            <!-- Delete button for pinned threads -->
+                            {% if user == thread.author or user.is_staff %}
+                            <div class="action-buttons">
+                                <form method="post" action="{% url 'delete_discussion' thread.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-danger" title="Delete thread">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">
+                                    <i class="fas fa-thumbtack text-warning me-2"></i>{{ thread.title }}
+                                </h5>
+                                <span class="badge rounded-pill bg-warning text-dark">{% trans "Pinned" %}</span>
+                            </div>
+                            <p class="mb-1 text-muted">{{ thread.get_short_content }}</p>
+                            <small class="text-muted">
+                                {% blocktrans with author=thread.author.get_full_name|default:thread.author.username time=thread.updated_at|timesince %}
+                                Started by {{ author }} • Last activity {{ time }} ago
+                                {% endblocktrans %}
+                            </small>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Recent Discussions -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fas fa-comments me-2"></i> {% trans "Recent Discussions" %}
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown">
+                                {% if sort == 'newest' %}
+                                    {% trans "Sort by: Newest First" %}
+                                {% elif sort == 'popular' %}
+                                    {% trans "Sort by: Most Popular" %}
+                                {% else %}
+                                    {% trans "Sort by: Recent Activity" %}
+                                {% endif %}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="?sort=recent">{% trans "Recent Activity" %}</a></li>
+                                <li><a class="dropdown-item" href="?sort=newest">{% trans "Newest First" %}</a></li>
+                                <li><a class="dropdown-item" href="?sort=popular">{% trans "Most Popular" %}</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        {% for thread in recent_threads %}
+                        <div class="list-group-item position-relative">
+                            <!-- Delete button for thread author -->
+                            {% if user == thread.author or user.is_staff %}
+                            <div class="action-buttons">
+                                <form method="post" action="{% url 'delete_discussion' thread.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-danger" title="Delete thread">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ thread.title }}</h5>
+                                <div class="d-flex">
+                                    {% if thread.category %}
+                                    <span class="badge bg-secondary me-2">{{ thread.category.name }}</span>
+                                    {% endif %}
+                                    <small class="text-muted">{{ thread.comments.count }} <i class="far fa-comment"></i></small>
+                                </div>
+                            </div>
+                            <p class="mb-1 text-muted">{{ thread.get_short_content }}</p>
+                            <div class="d-flex justify-content-between">
+                                <small class="text-muted">
+                                    {% blocktrans with author=thread.author.get_full_name|default:thread.author.username %}
+                                    By {{ author }}
+                                    {% endblocktrans %}
+                                </small>
+                                <small class="text-muted">
+                                    {{ thread.updated_at|timesince }} {% trans "ago" %}
+                                </small>
+                            </div>
+                            
+                            <!-- Like and Comment buttons -->
+                            <div class="mt-2 d-flex justify-content-end gap-2">
+                                <form method="post" action="{% url 'like_discussion' thread.id %}" class="like-form">
+                                    {% csrf_token %}
+                                    <button type="submit" 
+                                        class="btn btn-sm {% if request.user in thread.likes.all %}btn-primary{% else %}btn-outline-primary{% endif %} like-btn">
+                                        <i class="fas fa-thumbs-up"></i> 
+                                        <span class="like-count">{{ thread.likes.count }}</span>
+                                    </button>
+                                </form>
+                                <a href="{% url 'discussion_detail' thread.id %}" class="btn btn-sm btn-outline-secondary comment-btn">
+                                    <i class="fas fa-comment"></i> {% trans "Comment" %}
+                                </a>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="list-group-item">
+                            <div class="text-center py-4">
+                                <i class="far fa-comments fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">{% trans "No discussions yet" %}</h5>
+                                <p class="text-muted mb-0">{% trans "Be the first to start a conversation!" %}</p>
+                                {% if user.is_authenticated %}
+                                    <button class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#newTopicModal">
+                                        <i class="fas fa-plus me-2"></i> {% trans "Start a Discussion" %}
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if recent_threads.has_other_pages %}
+                    <div class="card-footer">
+                        <nav aria-label="Thread pagination">
+                            <ul class="pagination justify-content-center mb-0">
+                                {% if recent_threads.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ recent_threads.previous_page_number }}&sort={{ sort }}" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                                
+                                {% for i in recent_threads.paginator.page_range %}
+                                    {% if recent_threads.number == i %}
+                                    <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+                                    {% else %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ i }}&sort={{ sort }}">{{ i }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                {% if recent_threads.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ recent_threads.next_page_number }}&sort={{ sort }}" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <form class="d-flex mb-3" method="get" action="{% url 'forum_search' %}">
+                    <input class="form-control me-2" 
+                        type="search" 
+                        name="q" 
+                        placeholder="Search forum..." 
+                        aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+                
+                <!-- Categories Card -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <i class="fas fa-list me-2"></i> {% trans "Discussion Categories" %}
+                    </div>
+                    <div class="list-group list-group-flush">
+                        {% for category in categories %}
+                        <a href="{% url 'category_posts' category.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="{{ category.icon }} me-2 text-primary"></i>
+                                {{ category.name }}
+                            </div>
+                            <span class="badge bg-primary rounded-pill">{{ category.thread_count }}</span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Quick Links Card -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-link me-2"></i> {% trans "Quick Links" %}
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <a href="{% url 'prayer_requests' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-praying-hands me-2 text-success"></i> {% trans "Prayer Requests" %}
+                        </a>
+                        <a href="{% url 'bible_study_archive' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-bible me-2 text-info"></i> {% trans "Bible Study Archive" %}
+                        </a>
+                        <a href="{% url 'bible_study_archive' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-bible me-2"></i> {% trans "Bible Studies" %}
+                        </a>
+                        <a href="{% url 'event_calendar' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-calendar-alt me-2 text-warning"></i> {% trans "Church Events Calendar" %}
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action" data-bs-toggle="modal" data-bs-target="#guidelinesModal">
+                            <i class="fas fa-info-circle me-2 text-primary"></i> {% trans "Forum Guidelines" %}
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Active Members Card -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-users me-2"></i> {% trans "Active Members" %}
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            {% for user in active_users %}
+                                <a href="{% url 'user_profile' user.id %}" class="avatar" data-bs-toggle="tooltip" title="{{ user.get_full_name|default:user.username }}">
+                                    {% if user.userprofile.avatar %}
+                                        <img src="{{ user.userprofile.avatar.url }}" class="rounded-circle" width="40" height="40" alt="{{ user.username }}">
+                                    {% else %}
+                                        <img src="{% static 'images/default-avatar.webp' %}" class="rounded-circle" width="40" height="40" alt="Default avatar">
+                                    {% endif %}
+                                </a>
+                            {% empty %}
+                                <p class="text-muted mb-0">{% trans "No active members to show" %}</p>
+                            {% endfor %}
+                        </div>
+                        {% if member_directory_url_exists %}
+                            <a href="{% url 'member_directory' %}" class="btn btn-outline-primary btn-sm w-100">
+                                <i class="fas fa-user-friends me-1"></i> {% trans "View All Members" %}
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Statistics Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-bar me-2"></i> {% trans "Forum Statistics" %}
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-comments me-2 text-primary"></i>
+                                {% trans "Total Discussions:" %} <strong>{{ total_threads }}</strong>
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-comment-dots me-2 text-primary"></i>
+                                {% trans "Total Replies:" %} <strong>{{ total_posts }}</strong>
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-users me-2 text-primary"></i>
+                                {% trans "Total Members:" %} <strong>{{ total_members }}</strong>
+                            </li>
+                            <li>
+                                <i class="fas fa-user-clock me-2 text-primary"></i>
+                                {% trans "Newest Member:" %}
+                                {% if newest_member %}
+                                    <a href="{% url 'user_profile' newest_member.id %}" class="text-decoration-none">
+                                        <strong>{{ newest_member.get_full_name|default:newest_member.username }}</strong>
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">{% trans "No members yet" %}</span>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- New Topic Modal -->
+{% if user.is_authenticated %}
+<div class="modal fade" id="newTopicModal" tabindex="-1" aria-labelledby="newTopicModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="newTopicModalLabel">
+                    <i class="fas fa-plus-circle me-2"></i> {% trans "Start New Discussion" %}
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'create_discussion' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="category" class="form-label">{% trans "Category" %}</label>
+                            <select class="form-select" id="category" name="category" required>
+                                <option value="">{% trans "Select a category..." %}</option>
+                                {% for category in categories %}
+                                <option value="{{ category.id }}">
+                                    <i class="{{ category.icon }} me-2"></i>{{ category.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="title" class="form-label">{% trans "Title" %}</label>
+                            <input type="text" class="form-control" id="title" name="title" 
+                                   placeholder="{% trans 'What is this discussion about?' %}" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="content" class="form-label">{% trans "Message" %}</label>
+                        <textarea class="form-control" id="content" name="content" rows="8" 
+                                  placeholder="{% trans 'Share your thoughts, questions, or prayer requests...' %}" required></textarea>
+                        <div class="form-text">
+                            {% trans "You can use basic HTML or Markdown for formatting." %}
+                        </div>
+                    </div>
+                    
+                    {% if user.is_staff %}
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="is_pinned" name="is_pinned">
+                        <label class="form-check-label" for="is_pinned">
+                            {% trans "Pin this discussion" %}
+                        </label>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i> {% trans "Cancel" %}
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane me-2"></i> {% trans "Post Discussion" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Forum Guidelines Modal -->
+<div class="modal fade" id="guidelinesModal" tabindex="-1" aria-labelledby="guidelinesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="guidelinesModalLabel">
+                    <i class="fas fa-info-circle me-2"></i> {% trans "Forum Guidelines" %}
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-4">
+                    <h6 class="text-primary">
+                        <i class="fas fa-hands-helping me-2"></i> {% trans "Welcome to our Christian Community" %}
+                    </h6>
+                    <p>{% trans "This forum is a place for members of our church family to encourage one another, discuss faith matters, and grow together in Christ. Please help us maintain a loving and respectful environment." %}</p>
+                </div>
+                
+                <div class="mb-4">
+                    <h6 class="text-primary">
+                        <i class="fas fa-check-circle me-2"></i> {% trans "Do:" %}
+                    </h6>
+                    <ul>
+                        <li>{% trans "Speak with love and grace (Ephesians 4:29)" %}</li>
+                        <li>{% trans "Keep discussions Christ-centered and biblically based" %}</li>
+                        <li>{% trans "Respect different opinions and interpretations" %}</li>
+                        <li>{% trans "Pray for one another and offer encouragement" %}</li>
+                        <li>{% trans "Use proper language and tone at all times" %}</li>
+                    </ul>
+                </div>
+                
+                <div class="mb-4">
+                    <h6 class="text-primary">
+                        <i class="fas fa-times-circle me-2"></i> {% trans "Don't:" %}
+                    </h6>
+                    <ul>
+                        <li>{% trans "Post offensive, inflammatory, or argumentative content" %}</li>
+                        <li>{% trans "Engage in doctrinal debates that divide rather than unite" %}</li>
+                        <li>{% trans "Share personal information about yourself or others" %}</li>
+                        <li>{% trans "Advertise products, services, or external events" %}</li>
+                        <li>{% trans "Post copyrighted material without permission" %}</li>
+                    </ul>
+                </div>
+                
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>{% trans "Note:" %}</strong> {% trans "Moderators may edit or remove posts that violate these guidelines. Repeated violations may result in loss of posting privileges." %}
+                </div>
+                
+                <div class="text-center mt-4">
+                    <p class="mb-0">
+                        <i class="fas fa-quote-left me-2 text-muted"></i>
+                        <em>"Let us consider how we may spur one another on toward love and good deeds."</em>
+                        <br>
+                        <strong>Hebrews 10:24</strong>
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                    <i class="fas fa-check me-2"></i> {% trans "I Understand" %}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+    
+    // Handle like button clicks
+    document.querySelectorAll('.like-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.closest('.like-form');
+            const url = form.action;
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const likeCount = form.querySelector('.like-count');
+                    
+                    // Update like count
+                    likeCount.textContent = data.likes_count;
+                    
+                    // Update button style
+                    if (data.action === 'liked') {
+                        this.classList.remove('btn-outline-primary');
+                        this.classList.add('btn-primary');
+                    } else {
+                        this.classList.remove('btn-primary');
+                        this.classList.add('btn-outline-primary');
+                    }
+                    
+                    // Add animation
+                    this.classList.add('animate__animated', 'animate__heartBeat');
+                    setTimeout(() => {
+                        this.classList.remove('animate__animated', 'animate__heartBeat');
+                    }, 1000);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

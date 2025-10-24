@@ -1,0 +1,359 @@
+
+{% extends "base.html" %}
+
+{% block title %}Welcome | CAAC{% endblock %}
+
+{% block content %}
+
+    <!-- Hero Section -->
+     <section class="hero d-flex align-items-center" 
+         style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                url('https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+                background-size: cover;
+                background-position: center;
+                min-height: 60vh; color: white;">
+        
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-3 fw-bold mb-4">Our Ministries</h1>
+                    <p class="lead mb-4">Find where you belong and grow in faith together</p>
+                    
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="#children" class="btn btn-primary btn-lg px-4 py-2">
+                            <i class="fas fa-child me-2"></i> Children
+                        </a>
+                        <a href="#youth" class="btn btn-primary btn-lg px-4 py-2">
+                            <i class="fas fa-users me-2"></i> Youth
+                        </a>
+                        <a href="#adults" class="btn btn-primary btn-lg px-4 py-2">
+                            <i class="fas fa-hands-praying me-2"></i> Adults
+                        </a>
+                        <a href="#outreach" class="btn btn-primary btn-lg px-4 py-2">
+                            <i class="fas fa-hands-helping me-2"></i> Outreach
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+<!-- Tab Navigation -->
+        <ul class="nav nav-tabs justify-content-center" id="aboutContactTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#sermon" type="button" role="tab" aria-selected="true">Sermons</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#ministries" type="button" role="tab" aria-selected="false">Ministries</button>
+            </li>
+        </ul>
+
+
+
+    <!-- Children's Ministry -->
+    <section id="children" class="py-5">
+            
+            {% for category in categories %}
+<section id="{{ category.slug }}" class="py-5 {% cycle '' 'bg-light' %}">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">{{ category.name }}</h2>
+            {% if category.description %}
+            <p class="lead text-muted">{{ category.description }}</p>
+            {% endif %}
+        </div>
+        
+        <div class="row g-4">
+            {% for card in category.cards.all %}
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <img src="{{ card.image.url }}" 
+                         class="card-img-top" 
+                         alt="{{ card.title }}"
+                         style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        {% if card.age_group or card.meeting_time %}
+                        <div class="d-flex justify-content-between mb-2">
+                            {% if card.age_group %}
+                            <span class="age-group">{{ card.age_group }}</span>
+                            {% endif %}
+                            {% if card.meeting_time %}
+                            <span class="text-muted">{{ card.meeting_time }}</span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        <h4 class="card-title">{{ card.title }}</h4>
+                        <div class="card-text">{{ card.description|safe }}</div>
+                    </div>
+                    <div class="card-footer bg-white border-0">
+                        <a href="#" class="btn btn-primary">
+                            {{ card.button_text }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endfor %}
+            
+            <div class="text-center mt-5">
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="icon-box mb-3">
+                            <i class="fas fa-campground text-primary fa-2x"></i>
+                        </div>
+                        <h4>Vacation Bible School</h4>
+                        <p>Annual summer program with games, music, and Bible adventures.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="icon-box mb-3">
+                            <i class="fas fa-birthday-cake text-primary fa-2x"></i>
+                        </div>
+                        <h4>Children's Events</h4>
+                        <p>Seasonal activities and special celebrations throughout the year.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="icon-box mb-3">
+                            <i class="fas fa-user-shield text-primary fa-2x"></i>
+                        </div>
+                        <h4>Safe Environment</h4>
+                        <p>All volunteers are background checked and trained.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Youth Ministry -->
+    <section id="youth" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Youth Ministry</h2>
+                <p class="lead text-muted">Helping teens navigate life with biblical truth</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="ministry-card card h-100">
+                        <img src="https://www.learnreligions.com/thmb/wqoKOypt9610JBebNhFNRmdfC1M=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/GettyImages-91510711-59aeef69685fbe00105f6072.jpg" 
+                             class="ministry-img card-img-top" 
+                             alt="Youth Group">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="age-group">Grades 6-8</span>
+                                <span class="text-muted">Fridays 6:30 PM</span>
+                            </div>
+                            <h4 class="card-title">Middle School Ministry</h4>
+                            <p class="card-text">A place for younger teens to build friendships, ask big questions, and discover how faith connects to their daily lives.</p>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <a href="#" class="btn btn-primary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="ministry-card card h-100">
+                        <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80" 
+                             class="ministry-img card-img-top" 
+                             alt="High School Ministry">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="age-group">Grades 9-12</span>
+                                <span class="text-muted">Fridays 7:00 PM</span>
+                            </div>
+                            <h4 class="card-title">High School Ministry</h4>
+                            <p class="card-text">Older teens engage in deep discussions, worship, and service opportunities as they prepare for life beyond high school.</p>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <a href="#" class="btn btn-primary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5">
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="icon-box mb-3">
+                            <i class="fas fa-mountain text-primary fa-2x"></i>
+                        </div>
+                        <h4>Retreats</h4>
+                        <p>Annual weekend getaways for spiritual growth and bonding.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="icon-box mb-3">
+                            <i class="fas fa-music text-primary fa-2x"></i>
+                        </div>
+                        <h4>Worship Team</h4>
+                        <p>Opportunities for teens to develop and use musical gifts.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="icon-box mb-3">
+                            <i class="fas fa-hands-helping text-primary fa-2x"></i>
+                        </div>
+                        <h4>Mission Trips</h4>
+                        <p>Summer service projects locally and internationally.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Adult Ministries -->
+    <section id="adults" class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Adult Ministries</h2>
+                <p class="lead text-muted">Growing together in faith at every stage of life</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="ministry-card card h-100">
+                        <img src="https://images.unsplash.com/photo-1452421822248-d4c2b47f0c81?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" 
+                             class="ministry-img card-img-top" 
+                             alt="Small Groups">
+                        <div class="card-body">
+                            <h4 class="card-title">Small Groups</h4>
+                            <p class="card-text">Weekly gatherings in homes for Bible study, prayer, and fellowship with others in similar life stages.</p>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <a href="#" class="btn btn-primary">Find a Group</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="ministry-card card h-100">
+                        <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80" 
+                             class="ministry-img card-img-top" 
+                             alt="Men's Ministry">
+                        <div class="card-body">
+                            <h4 class="card-title">Men's Ministry</h4>
+                            <p class="card-text">Monthly breakfasts, service projects, and outdoor activities to build godly character and friendships.</p>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <a href="#" class="btn btn-primary">Get Involved</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="ministry-card card h-100">
+                        <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" 
+                             class="ministry-img card-img-top" 
+                             alt="Women's Ministry">
+                        <div class="card-body">
+                            <h4 class="card-title">Women's Ministry</h4>
+                            <p class="card-text">Bible studies, retreats, and special events to encourage spiritual growth and meaningful connections.</p>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <a href="#" class="btn btn-primary">Join Us</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5">
+                <div class="row g-4">
+                    <div class="col-md-3">
+                        <div class="icon-box mb-3">
+                            <i class="fas fa-ring text-primary fa-2x"></i>
+                        </div>
+                        <h4>Marriage Enrichment</h4>
+                        <p>Workshops and date nights to strengthen marriages.</p>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="icon-box mb-3">
+                            <i class="fas fa-baby text-primary fa-2x"></i>
+                        </div>
+                        <h4>Young Families</h4>
+                        <p>Support and fellowship for parents with young children.</p>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="icon-box mb-3">
+                            <i class="fas fa-graduation-cap text-primary fa-2x"></i>
+                        </div>
+                        <h4>College & Career</h4>
+                        <p>Community for young adults navigating early adulthood.</p>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="icon-box mb-3">
+                            <i class="fas fa-chair text-primary fa-2x"></i>
+                        </div>
+                        <h4>Seniors</h4>
+                        <p>Monthly luncheons and Bible studies for older adults.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Outreach -->
+    <section id="outreach" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold">Outreach & Service</h2>
+                <p class="lead text-muted">Sharing God's love in practical ways</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="ministry-card card h-100">
+                        <img src="https://images.unsplash.com/photo-1608248544923-0ac26f5347d2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                             class="ministry-img card-img-top" 
+                             alt="Food Pantry">
+                        <div class="card-body">
+                            <h4 class="card-title">Food Pantry</h4>
+                            <p class="card-text">Weekly distribution of groceries to families in need in our community.</p>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <a href="#" class="btn btn-primary">Volunteer</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="ministry-card card h-100">
+                        <img src="https://images.unsplash.com/photo-1528977695568-bd5e5069eb61?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                             class="ministry-img card-img-top" 
+                             alt="Mission Trips">
+                        <div class="card-body">
+                            <h4 class="card-title">Mission Trips</h4>
+                            <p class="card-text">Annual opportunities to serve both locally and internationally.</p>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <a href="#" class="btn btn-primary">Upcoming Trips</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="ministry-card card h-100">
+                        <img src="https://images.unsplash.com/photo-1573497491208-6da53e8856f7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                             class="ministry-img card-img-top" 
+                             alt="Prison Ministry">
+                        <div class="card-body">
+                            <h4 class="card-title">Prison Ministry</h4>
+                            <p class="card-text">Bringing hope and restoration to incarcerated individuals and their families.</p>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <a href="#" class="btn btn-primary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5">
+                <a href="#" class="btn btn-primary btn-lg px-4 py-2">
+                    <i class="fas fa-handshake me-2"></i> Serve With Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+   {% endblock %}

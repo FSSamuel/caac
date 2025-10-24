@@ -1,0 +1,505 @@
+:root {
+    --primary: #4b6cb7;
+    --secondary: #182848;
+    --light: #f8f9fa;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                url('https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+    background-size: cover !important;
+    background-position: center !important;
+    min-height: 60vh;
+    color: white;
+}
+
+
+
+
+.service-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+.congregation-card {
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 30px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            height: 100%;
+        }
+        
+.congregation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+.card-header {
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+.mandarin-header {
+            background-color: var(--mandarin-color);
+        }
+        
+.cantonese-header {
+            background-color: var(--cantonese-color);
+        }
+        
+.english-header {
+            background-color: var(--english-color);
+        }
+        
+.btn-visit {
+            width: 100%;
+            padding: 10px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        
+.btn-mandarin {
+            background-color: var(--mandarin-color);
+        }
+        
+.btn-mandarin:hover {
+            background-color: #d35400;
+        }
+        
+.btn-cantonese {
+            background-color: var(--cantonese-color);
+        }
+        
+.btn-cantonese:hover {
+            background-color: #2980b9;
+        }
+        
+.btn-english {
+            background-color: var(--english-color);
+        }
+        
+.btn-english:hover {
+            background-color: #8e44ad;
+        }
+
+
+.about-hero {
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                url('https://www.blackhallstcolumba.org.uk/content/pages/uploaded_images/89.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 60vh;
+    color: white;
+}
+
+/* Cards */
+.event-card, .ministry-card, .sermon-card, .leadership-card, .contact-card, .belief-item {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.event-card:hover, .ministry-card:hover, .sermon-card:hover, 
+.leadership-card:hover, .contact-card:hover, .belief-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Images */
+.event-img, .ministry-img, .sermon-img {
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Badges and Tags */
+.date-badge {
+    background-color: var(--primary);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 30px;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.category-tag, .age-group, .badge-primary {
+    background-color: var(--secondary);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+/* Filter Card */
+.filter-card {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+}
+
+/* Icon Boxes */
+.icon-box, .contact-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(75, 108, 183, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+/* Timeline */
+.history-timeline {
+    position: relative;
+    padding-left: 3rem;
+}
+
+.history-timeline::before {
+    content: '';
+    position: absolute;
+    left: 1.5rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--primary);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -3rem;
+    top: 0.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 4px solid white;
+}
+
+/* Form Styles */
+.form-control, .form-select {
+    border-radius: 10px;
+    padding: 12px 15px;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.25rem rgba(75, 108, 183, 0.25);
+}
+
+.btn-primary {
+    padding: 12px 30px;
+    border-radius: 10px;
+    font-weight: 600;
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    background-color: #3a5a9b;
+    border-color: #3a5a9b;
+}
+
+/* Map iframe */
+iframe {
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Service Card */
+.service-card {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+
+
+
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.card-body.bg-opacity-75 {
+    backdrop-filter: blur(6px);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.ministry-img, .event-img {
+    height: 220px;
+    object-fit: cover;
+    width: 100%;
+    transition: transform 0.3s ease;
+}
+
+.ministry-img:hover, .event-img:hover {
+    transform: scale(1.03);
+}
+
+.date-badge {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 30px;
+    font-weight: bold;
+}
+
+.icon-box {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
+
+
+
+  .language-switcher {
+    font-family: 'Arial', sans-serif;
+    margin: 10px;
+  }
+  
+  .select-wrapper {
+    position: relative;
+    width: 200px;
+  }
+  
+  .language-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .language-select:hover {
+    border-color: #aaa;
+  }
+  
+  .language-select:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(22, 27, 33, 0.2);
+  }
+  
+  .select-arrow {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #666;
+  }
+  
+  .flag-icon {
+    margin-right: 8px;
+  }
+
+
+
+
+  .initial-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #007bff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+
+
+.belief-card {
+            border-left: 4px solid #8B0000;
+            transition: transform 0.3s;
+        }
+        .belief-card:hover {
+            transform: translateY(-5px);
+        }
+        .bible-verse {
+            font-style: italic;
+            color: #555;
+        }
+
+
+
+ .like-btn:hover, .comment-btn:hover {
+        transform: scale(1.1);
+    }
+    .action-buttons {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+    .like-form {
+        display: inline-block;
+    }
+
+
+.animate__heartBeat {
+    animation: heartBeat 1s;
+}
+
+@keyframes heartBeat {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.2); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+
+
+/* Next Steps Section Styles */
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    color: var(--secondary);
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+/* Next Steps Cards */
+.next-steps .col-md-4 {
+    margin-bottom: 2rem;
+}
+
+.next-steps .p-4 {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    height: 100%;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.next-steps .p-4:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+/* Icon Box Styles for Next Steps */
+.next-steps .icon-box {
+    width: 80px;
+    height: 80px;
+    background-color: var(--light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.next-steps .p-4:hover .icon-box {
+    background-color: var(--primary);
+    transform: scale(1.1);
+}
+
+.next-steps .icon-box i {
+    color: var(--primary);
+    font-size: 2rem;
+    transition: all 0.3s ease;
+}
+
+.next-steps .p-4:hover .icon-box i {
+    color: white;
+}
+
+/* Text Styles */
+.next-steps h3 {
+    color: var(--secondary);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.next-steps p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+/* Button Styles */
+.next-steps .btn-outline-primary {
+    color: var(--primary);
+    border-color: var(--primary);
+    border-radius: 25px;
+    padding: 8px 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.next-steps .btn-outline-primary:hover {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+}

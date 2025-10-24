@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5 text-center">
+    <i class="fas fa-check-circle text-success mb-4" style="font-size: 5rem;"></i>
+    <h1>You're Unsubscribed</h1>
+    <p class="lead">We're sorry to see you go. You won't receive further emails.</p>
+    <a href="{% url 'index' %}" class="btn btn-primary mt-3">
+        <i class="fas fa-home"></i> Return Home
+    </a>
+</div>
+{% endblock %}

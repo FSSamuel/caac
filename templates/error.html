@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Error | {{ church_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h2 class="mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Oops! Something Went Wrong
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <img src="{% static 'images/error-icon.png' %}" alt="Error" class="img-fluid" style="max-height: 150px;">
+                    </div>
+                    
+                    <div class="alert alert-danger">
+                        <h4 class="alert-heading">Error Details:</h4>
+                        <p class="mb-0">{{ error }}</p>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <h4 class="alert-heading">What to do now?</h4>
+                        <ul class="mb-0">
+                            <li>Try refreshing the page</li>
+                            <li>Go back to the <a href="{% url 'forum' %}" class="alert-link">forum homepage</a></li>
+                            <li>If the problem persists, contact support</li>
+                        </ul>
+                    </div>
+                    
+                    {% if request.user.is_staff %}
+                    <div class="mt-4">
+                        <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#technicalDetails">
+                            Show Technical Details
+                        </button>
+                        
+                        <div class="collapse mt-2" id="technicalDetails">
+                            <div class="card card-body bg-light">
+                                <h5>Technical Information</h5>
+                                <pre class="small text-muted mb-0">
+Error Time: {% now "DATETIME_FORMAT" %}
+Request Path: {{ request.path }}
+User: {{ request.user.username }}
+{% if request.GET %}GET Parameters: {{ request.GET }}{% endif %}
+{% if request.POST %}POST Parameters: {{ request.POST }}{% endif %}
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{% url 'forum' %}" class="btn btn-primary">
+                        <i class="fas fa-home me-2"></i> Return to Forum
+                    </a>
+                    <a href="{% url 'prayer_requests' %}" class="btn btn-outline-primary ms-2">
+                        <i class="fas fa-pray me-2"></i> Prayer Requests
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .error-icon {
+        font-size: 5rem;
+        color: #dc3545;
+    }
+    pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+</style>
+{% endblock %}

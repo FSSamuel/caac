@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Edit Discussion" %} | {{ church_name }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/forum.css' %}">
+<style>
+    .edit-discussion-card {
+        border-radius: 10px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        border: none;
+    }
+    .edit-header {
+        background: linear-gradient(135deg, #2c6ed5 0%, #4a89dc 100%);
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .edit-icon {
+        background: rgba(255, 255, 255, 0.15);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+    }
+    .form-group {
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+    .form-control, .form-select {
+        border-radius: 8px;
+        padding: 12px 15px;
+        border: 1px solid #e1e5eb;
+        transition: all 0.3s;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #4a89dc;
+        box-shadow: 0 0 0 0.2rem rgba(74, 137, 220, 0.25);
+    }
+    .floating-label {
+        position: absolute;
+        top: -10px;
+        left: 15px;
+        background: white;
+        padding: 0 5px;
+        font-size: 12px;
+        color: #4a89dc;
+        font-weight: 500;
+    }
+    .btn-edit {
+        padding: 10px 25px;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+    .preview-card {
+        border-left: 4px solid #4a89dc;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 10px;
+    }
+    .category-badge {
+        background-color: #e1f0ff;
+        color: #2c6ed5;
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card edit-discussion-card">
+                    <div class="edit-header">
+                        <div class="d-flex align-items-center">
+                            <div class="edit-icon">
+                                <i class="fas fa-edit fa-lg text-white"></i>
+                            </div>
+                            <div>
+                                <h2 class="h4 mb-0 text-white">{% trans "Edit Discussion" %}</h2>
+                                <p class="text-white-50 mb-0">{% trans "Refine your thoughts and share with the community" %}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body p-4">
+                        <form method="post">
+                            {% csrf_token %}
+                            
+                            <!-- Title Field -->
+                            <div class="form-group">
+                                <label for="id_title" class="floating-label">{% trans "Discussion Title" %}</label>
+                                <input type="text" 
+                                       class="form-control form-control-lg" 
+                                       id="id_title" 
+                                       name="title" 
+                                       value="{{ form.title.value|default:'' }}"
+                                       placeholder="{% trans 'Enter a clear and descriptive title' %}">
+                                {% if form.title.errors %}
+                                    <div class="text-danger small mt-2">
+                                        {{ form.title.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Category Field -->
+                            <div class="form-group">
+                                <label for="id_category" class="floating-label">{% trans "Category" %}</label>
+                                <select class="form-select" id="id_category" name="category">
+                                    <option value="">{% trans "Select a category..." %}</option>
+                                    {% for category in categories %}
+                                        <option value="{{ category.id }}" 
+                                            {% if form.category.value|stringformat:"s" == category.id|stringformat:"s" %}selected{% endif %}>
+                                            <i class="{{ category.icon }} me-2"></i>{{ category.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                {% if form.category.errors %}
+                                    <div class="text-danger small mt-2">
+                                        {{ form.category.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Content Field -->
+                            <div class="form-group">
+                                <label for="id_content" class="floating-label">{% trans "Discussion Content" %}</label>
+                                <textarea class="form-control" 
+                                          id="id_content" 
+                                          name="content" 
+                                          rows="8"
+                                          placeholder="{% trans 'Share your thoughts, questions, or insights...' %}">{{ form.content.value|default:'' }}</textarea>
+                                <div class="form-text small">
+                                    {% trans "You can use Markdown formatting for your content" %}
+                                </div>
+                                {% if form.content.errors %}
+                                    <div class="text-danger small mt-2">
+                                        {{ form.content.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Preview Section -->
+                            <div class="mb-4">
+                                <h5 class="mb-3">
+                                    <i class="fas fa-eye me-2 text-primary"></i> 
+                                    {% trans "Preview"%}
+                                </h5>
+                                <div class="preview-card">
+                                    <h4 id="preview-title" class="mb-3">{{ form.title.value|default:"Your title will appear here" }}</h4>
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="category-badge" id="preview-category">
+                                            {% if form.category.value %}
+                                                {% for category in categories %}
+                                                    {% if category.id == form.category.value %}
+                                                        <i class="{{ category.icon }} me-1"></i>{{ category.name }}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% else %}
+                                                {% trans "Category" %}
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                    <div id="preview-content" class="text-muted">
+                                        {{ form.content.value|default:"Your content will appear here"|truncatechars:150 }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Pin Option for Staff -->
+                            {% if request.user.is_staff %}
+                            <div class="form-check form-switch mb-4">
+                                <input class="form-check-input" 
+                                       type="checkbox" 
+                                       id="id_is_pinned" 
+                                       name="is_pinned"
+                                       {% if form.is_pinned.value %}checked{% endif %}>
+                                <label class="form-check-label" for="id_is_pinned">
+                                    <i class="fas fa-thumbtack me-2 text-warning"></i> 
+                                    {% trans "Pin this discussion to the top of the forum" %}
+                                </label>
+                            </div>
+                            {% endif %}
+                            
+                            <!-- Action Buttons -->
+                            <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                                <a href="{% url 'discussion_detail' discussion.pk %}" class="btn btn-lg btn-outline-secondary btn-edit">
+                                    <i class="fas fa-times me-2"></i> {% trans "Cancel" %}
+                                </a>
+                                <button type="submit" class="btn btn-lg btn-primary btn-edit">
+                                    <i class="fas fa-save me-2"></i> {% trans "Save Changes" %}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Update preview in real-time
+    const titleInput = document.getElementById('id_title');
+    const contentInput = document.getElementById('id_content');
+    const categorySelect = document.getElementById('id_category');
+    const previewTitle = document.getElementById('preview-title');
+    const previewContent = document.getElementById('preview-content');
+    const previewCategory = document.getElementById('preview-category');
+    
+    // Function to update preview
+    function updatePreview() {
+        // Update title preview
+        previewTitle.textContent = titleInput.value || "{% trans 'Your title will appear here' %}";
+        
+        // Update content preview
+        previewContent.textContent = contentInput.value ? 
+            contentInput.value.substring(0, 150) + (contentInput.value.length > 150 ? '...' : '') : 
+            "{% trans 'Your content will appear here' %}";
+        
+        // Update category preview
+        const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+        if (selectedOption.textContent && selectedOption.value) {
+            previewCategory.innerHTML = `<i class="${selectedOption.dataset.icon} me-1"></i>${selectedOption.textContent}`;
+        } else {
+            previewCategory.textContent = "{% trans 'Category' %}";
+        }
+    }
+    
+    // Add event listeners
+    titleInput.addEventListener('input', updatePreview);
+    contentInput.addEventListener('input', updatePreview);
+    categorySelect.addEventListener('change', updatePreview);
+    
+    // Initialize preview
+    updatePreview();
+    
+    // Add icons to category options
+    const categoryOptions = categorySelect.querySelectorAll('option');
+    categoryOptions.forEach(option => {
+        if (option.value) {
+            const iconClass = option.textContent.match(/<i class="(.*?)"/);
+            if (iconClass && iconClass[1]) {
+                option.dataset.icon = iconClass[1];
+                option.textContent = option.textContent.replace(/<i class=".*?"><\/i>/, '');
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

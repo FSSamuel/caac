@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Discussions</h1>
+        <a href="{% url 'forum:create_discussion' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> New Discussion
+        </a>
+    </div>
+
+    <!-- Pinned Discussions -->
+    {% if pinned_threads %}
+    <div class="card mb-4 border-warning">
+        <div class="card-header bg-warning bg-opacity-10">
+            <i class="fas fa-thumbtack text-warning me-2"></i>
+            Pinned Discussions
+        </div>
+        <div class="list-group list-group-flush">
+            {% for thread in pinned_threads %}
+            <a href="{% url 'forum:discussion_detail' thread.pk %}" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ thread.title }}</h5>
+                    <span class="badge bg-secondary">{{ thread.category.name }}</span>
+                </div>
+                <p class="mb-1">{{ thread.get_short_content }}</p>
+                <small class="text-muted">
+                    Started by {{ thread.author.username }} • {{ thread.created_at|timesince }} ago
+                    • {{ thread.comments.count }} comments • {{ thread.likes.count }} likes
+                </small>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Recent Discussions -->
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-comments me-2"></i> Recent Discussions</span>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown">
+                        Sort: {% if sort == 'newest' %}Newest{% elif sort == 'popular' %}Popular{% else %}Recent Activity{% endif %}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="?sort=recent">Recent Activity</a></li>
+                        <li><a class="dropdown-item" href="?sort=newest">Newest First</a></li>
+                        <li><a class="dropdown-item" href="?sort=popular">Most Popular</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="list-group list-group-flush">
+            {% for thread in recent_threads %}
+            <a href="{% url 'forum:discussion_detail' thread.pk %}" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ thread.title }}</h5>
+                    <span class="badge bg-secondary">{{ thread.category.name }}</span>
+                </div>
+                <p class="mb-1">{{ thread.get_short_content }}</p>
+                <small class="text-muted">
+                    Started by {{ thread.author.username }} • {{ thread.created_at|timesince }} ago
+                    • {{ thread.comments.count }} comments • {{ thread.likes.count }} likes
+                </small>
+            </a>
+            {% empty %}
+            <div class="list-group-item">
+                <div class="text-center py-4">
+                    <i class="far fa-comments fa-3x text-muted mb-3"></i>
+                    <h5>No discussions yet</h5>
+                    <p>Be the first to start a conversation!</p>
+                    <a href="{% url 'forum:create_discussion' %}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i> Start a Discussion
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

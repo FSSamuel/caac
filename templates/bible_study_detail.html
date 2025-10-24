@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}{{ study.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-3">{{ study.title }}</h1>
+    <p class="text-muted">📅 Posted on {{ study.created_at|date:"F j, Y, g:i a" }}</p>
+
+    <hr>
+
+    <div class="mb-4">
+        <p>{{ study.content|linebreaks }}</p>
+    </div>
+
+    <a href="{% url 'bible_study_archive' %}" class="btn btn-outline-secondary">← Back to Archive</a>
+</div>
+{% endblock %}

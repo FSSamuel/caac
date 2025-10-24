@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}OUR BELIEFS | CAAC Church{% endblock %}
+
+{% block content %}
+
+    <!-- Main Content -->
+    <section 
+        
+    <div class="container text-center px-4">
+            <div class="text-center mb-5">
+                <h1 class="display-4 fw-bold">Our Core Beliefs</h1>
+                <p class="lead">The foundation of our faith and practice</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Belief 1 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="belief-card p-4 h-100 shadow-sm">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-cross me-3" style="font-size: 2rem; color: #8B0000;"></i>
+                            <h3>The Bible</h3>
+                        </div>
+                        <p>We believe the Bible is the inspired, infallible Word of God and the final authority for faith and life.</p>
+                        <p class="bible-verse mt-3">"All Scripture is God-breathed..." <br>— 2 Timothy 3:16</p>
+                    </div>
+                </div>
+
+                <!-- Belief 2 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="belief-card p-4 h-100 shadow-sm">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-dove me-3" style="font-size: 2rem; color: #8B0000;"></i>
+                            <h3>The Trinity</h3>
+                        </div>
+                        <p>We believe in one God eternally existing in three persons: Father, Son, and Holy Spirit.</p>
+                        <p class="bible-verse mt-3">"Therefore go and make disciples..." <br>— Matthew 28:19</p>
+                    </div>
+                </div>
+
+                <!-- Belief 3 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="belief-card p-4 h-100 shadow-sm">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-heart me-3" style="font-size: 2rem; color: #8B0000;"></i>
+                            <h3>Salvation</h3>
+                        </div>
+                        <p>We believe salvation comes by grace through faith in Jesus Christ alone, not by works.</p>
+                        <p class="bible-verse mt-3">"For it is by grace you have been saved..." <br>— Ephesians 2:8-9</p>
+                    </div>
+                </div>
+
+                <!-- Belief 4 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="belief-card p-4 h-100 shadow-sm">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-church me-3" style="font-size: 2rem; color: #8B0000;"></i>
+                            <h3>The Church</h3>
+                        </div>
+                        <p>We believe the Church is Christ's body on earth, called to worship, fellowship, and evangelism.</p>
+                        <p class="bible-verse mt-3">"And let us consider how we may spur..." <br>— Hebrews 10:24-25</p>
+                    </div>
+                </div>
+
+                <!-- Belief 5 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="belief-card p-4 h-100 shadow-sm">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-arrow-rotate-right me-3" style="font-size: 2rem; color: #8B0000;"></i>
+                            <h3>Second Coming</h3>
+                        </div>
+                        <p>We believe in the personal, visible return of Jesus Christ to establish His eternal kingdom.</p>
+                        <p class="bible-verse mt-3">"He will come again in glory..." <br>— Acts 1:11</p>
+                    </div>
+                </div>
+
+                <!-- Belief 6 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="belief-card p-4 h-100 shadow-sm">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-hand-holding-heart me-3" style="font-size: 2rem; color: #8B0000;"></i>
+                            <h3>Christian Living</h3>
+                        </div>
+                        <p>We believe Christians are called to holiness, service, and love for one another.</p>
+                        <p class="bible-verse mt-3">"Whatever you do, work at it with all your heart..." <br>— Colossians 3:23</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-5">
+                <a href="{% url 'index' %}" class="btn btn-outline-primary px-4 py-2">
+                    <i class="fas fa-arrow-left me-2"></i> Back to Home
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+{%endblock%}
+
+    
