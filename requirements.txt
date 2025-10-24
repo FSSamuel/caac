@@ -10,3 +10,4 @@ django-embed-video
 django-crispy-forms
 crispy-bootstrap5
 django-simple-captcha
+django-extensions
