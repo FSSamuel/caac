@@ -4,3 +4,5 @@ whitenoise
 dj-database-url
 psycopg[binary]
 django-ckeditor-5
+django-ckeditor
+Pillow
